@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>طبيبك</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #f5f7f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            direction: rtl;
+            padding: 10px;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+        #home-section { display: block; }
+        #doctor-section { display: none; }
+
+        /* الهيدر والهيرو */
+        .header {
+            background: #0d6e48;
+            padding: 18px 20px;
+            text-align: center;
+        }
+        .logo-text {
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-section {
+            background: #0d6e48;
+            padding: 28px 20px 38px;
+            text-align: center;
+        }
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+        }
+        .hero-icon i { font-size: 40px; color: white; }
+        .hero-title { font-size: 30px; font-weight: 800; color: white; }
+        .hero-subtitle { font-size: 15px; color: rgba(255,255,255,0.9); margin-top: 6px; }
+
+        /* أيقونات سريعة */
+        .quick-icons {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            margin: -24px 16px 0;
+            border-radius: 32px;
+            padding: 16px 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            gap: 6px;
+        }
+        .quick-item { text-align: center; flex: 1; }
+        .quick-circle {
+            width: 55px;
+            height: 55px;
+            background: #eef7f2;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+        }
+        .quick-circle i { font-size: 26px; color: #0d6e48; }
+        .quick-label { font-size: 13px; font-weight: 700; color: #2a5a48; }
+
+        /* عنوان القسم */
+        .section-head {
+            padding: 24px 18px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .section-head h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a3a2e;
+            border-right: 4px solid #0d6e48;
+            padding-right: 12px;
+        }
+        .badge-count {
+            background: #eef7f2;
+            color: #0d6e48;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        /* الفلتر */
+        .filter-bar {
+            padding: 10px 14px 12px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            white-space: nowrap;
+        }
+        .filter-btn {
+            padding: 10px 22px;
+            background: #f0f3f0;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: #3a5e4e;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-btn.active {
+            background: #0d6e48;
+            color: white;
+        }
+
+        /* بطاقات الأطباء */
+        .doctors-list {
+            padding: 10px 16px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .doctor-card {
+            background: white;
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 24px 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e6ede8;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+        }
+        .doctor-card:active { transform: scale(0.99); background: #fcfefd; }
+        .doc-avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #eef7f2;
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .doc-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .doc-initials {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0d6e48, #1f9e6e);
+            color: white;
+            font-weight: 800;
+            font-size: 48px;
+        }
+        .doc-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1e3a2e;
+            margin-bottom: 10px;
+        }
+        .doc-spec {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #eef7f2;
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0d6e48;
+            margin-bottom: 24px;
+        }
+        .doc-spec i { font-size: 15px; }
+        .detail-btn {
+            background: #0d6e48;
+            color: white;
+            border: none;
+            padding: 14px 0;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: 0.2s;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .detail-btn:active { background: #0a5a3a; }
+
+        /* صفحة التفاصيل */
+        .detail-header {
+            background: #0d6e48;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .gallery {
+            display: flex;
+            gap: 14px;
+            padding: 18px 16px 12px;
+        }
+        .gallery-img {
+            flex: 1;
+            border-radius: 28px;
+            overflow: hidden;
+            aspect-ratio: 1 / 0.85;
+            background: #f0f5f2;
+            position: relative;
+        }
+        .gallery-img img { width: 100%; height: 100%; object-fit: cover; }
+        .img-caption {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.6);
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 12px;
+            color: white;
+        }
+        .info-card {
+            background: white;
+            margin: 16px 18px;
+            padding: 22px;
+            border-radius: 32px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+        }
+        .detail-name { font-size: 24px; font-weight: 800; color: #1e3a2e; }
+        .detail-spec {
+            display: inline-block;
+            background: #eef7f2;
+            color: #0d6e48;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            margin: 10px 0 14px;
+        }
+        .detail-bio { font-size: 14px; line-height: 1.6; color: #4c6b5c; margin-bottom: 18px; }
+        .schedule {
+            background: #fafdfb;
+            border-radius: 24px;
+            padding: 14px 16px;
+            margin: 14px 0;
+        }
+        .schedule h4 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e5a43;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 8px;
+        }
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2ece6;
+        }
+        .price {
+            background: #eef7f2;
+            padding: 14px 18px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0d6e48;
+            margin-top: 12px;
+        }
+        .payment {
+            font-size: 13px;
+            color: #7c9a8a;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .map {
+            margin: 8px 18px 18px;
+            border-radius: 28px;
+            overflow: hidden;
+            height: 200px;
+            border: 1px solid #e2ece6;
+        }
+        .book-btn {
+            width: calc(100% - 36px);
+            margin: 0 18px 28px;
+            background: #0d6e48;
+            border: none;
+            padding: 16px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 800;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        /* المودال */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.65);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .modal.hidden { display: none; }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 36px 36px 0 0;
+            padding: 16px 0 28px;
+            animation: slideUp 0.25s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-handle {
+            width: 50px;
+            height: 5px;
+            background: #d0dbd4;
+            border-radius: 5px;
+            margin: 0 auto 16px;
+        }
+        .modal-title { font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 4px; }
+        .wa-note {
+            background: #eef7f2;
+            margin: 12px 20px;
+            padding: 10px;
+            border-radius: 30px;
+            font-size: 13px;
+            text-align: center;
+            color: #0d6e48;
+        }
+        .form-field {
+            margin: 14px 20px;
+        }
+        .form-field label {
+            font-size: 14px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .form-field input, 
+        .form-field textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #e2ece6;
+            border-radius: 28px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 15px;
+            resize: vertical;
+            background: #fff;
+        }
+        .form-field input:focus,
+        .form-field textarea:focus {
+            outline: none;
+            border-color: #0d6e48;
+        }
+        .send-btn {
+            background: #25D366;
+            width: calc(100% - 40px);
+            margin: 16px 20px 8px;
+            border: none;
+            padding: 14px;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 16px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .cancel-btn {
+            display: block;
+            margin: 10px auto 18px;
+            background: none;
+            border: none;
+            color: #8aa296;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px 20px;
+            border-radius: 40px;
+            transition: 0.2s;
+        }
+        .cancel-btn:active {
+            background: #f0f3f0;
+        }
+        .toast {
+            position: fixed;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e3a2e;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            z-index: 1100;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div id="home-section">
+        <div class="header"><span class="logo-text">طبيبك</span></div>
+        <div class="hero-section">
+            <div class="hero-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+            <h1 class="hero-title">صحتك أمانتك</h1>
+            <p class="hero-subtitle">دليل الأطباء الموثوق</p>
+        </div>
+        <div class="quick-icons">
+            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-tooth"></i></div><span class="quick-label">أسنان</span></div>
+            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-hand-sparkles"></i></div><span class="quick-label">جلدية</span></div>
+            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-baby"></i></div><span class="quick-label">أطفال</span></div>
+            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-eye"></i></div><span class="quick-label">عيون</span></div>
+        </div>
+        <div class="section-head">
+            <h2>أفضل الأطباء</h2>
+            <span class="badge-count" id="doctorCount">0</span>
+        </div>
+        <div class="filter-bar" id="filterContainer"></div>
+        <div class="doctors-list" id="doctorsGrid"></div>
+    </div>
+
+    <div id="doctor-section">
+        <div class="detail-header">
+            <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-right"></i></button>
+            <span id="detailDoctorName"></span>
+        </div>
+        <div class="gallery" id="doubleGallery"></div>
+        <div class="info-card">
+            <div class="detail-name" id="detailName"></div>
+            <span class="detail-spec" id="detailSpecialty"></span>
+            <p class="detail-bio" id="detailBio"></p>
+            <div class="schedule">
+                <h4><i class="fa-regular fa-clock"></i> ساعات العمل</h4>
+                <div id="scheduleContent"></div>
+            </div>
+            <div class="price"><i class="fa-solid fa-money-bill-wave"></i> الكشف: <strong id="detailPrice"></strong></div>
+            <div class="payment"><i class="fa-solid fa-wallet"></i> الدفع: شام كاش / نقدي</div>
+        </div>
+        <div class="map">
+            <iframe id="detailMap" width="100%" height="200" frameborder="0" style="border:0;"></iframe>
+        </div>
+        <button class="book-btn" onclick="openBookingModal()"><i class="fa-regular fa-calendar-check"></i> احجز موعداً</button>
+    </div>
+</div>
+
+<!-- مودال الحجز -->
+<div class="modal hidden" id="bookingModal">
+    <div class="modal-content">
+        <div class="modal-handle"></div>
+        <div class="modal-title">تأكيد الحجز</div>
+        <p style="text-align:center; font-size:14px;" id="modalDoctorName"></p>
+        <div class="wa-note"><i class="fa-brands fa-whatsapp"></i> سيتم إرسال طلبك عبر واتساب</div>
+        <form id="bookingForm">
+            <div class="form-field"><label>الاسم الكامل</label><input type="text" id="patientName" required></div>
+            <div class="form-field"><label>العمر</label><input type="number" id="patientAge" required></div>
+            <div class="form-field"><label>رقم الهاتف</label><input type="tel" id="patientPhone" required></div>
+            <div class="form-field">
+                <label><i class="fa-regular fa-note-sticky"></i> سبب الزيارة (اختياري)</label>
+                <textarea id="visitReason" rows="2" placeholder="مثال: ألم في الأسنان، كحة، فحص دوري..."></textarea>
+            </div>
+            <button type="submit" class="send-btn"><i class="fa-brands fa-whatsapp"></i> إرسال الطلب</button>
+        </form>
+        <!-- زر الإلغاء مع onclick مباشر -->
+        <button type="button" class="cancel-btn" onclick="closeBookingModal()">إلغاء</button>
+    </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+    // بيانات الأطباء
+    const doctors = [
+        { id:1, name:'د. عبدالحمن الشيخ', specialty:'أسنان', photo:'https://randomuser.me/api/portraits/men/32.jpg', clinicPhotos:['https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&h=300&fit=crop','https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=400&h=300&fit=crop'], bio:'خبرة 5 عاماً في تجميل وزراعة الأسنان، بتقنيات حديثة.', mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.3!3d33.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMwJzAwLjAiTiAzNsKwMTgnMDAuMCJF!5e0!3m2!1sar!2s!4v1700000000000', price:'5,000 ل.س', whatsapp:'963934175735', initials:'ع.ش',
+            schedule: { 'السبت - الخميس':'9ص - 5م', 'الجمعة':'مغلق' } },
+        { id:2, name:'د. عبدالحمن العلي', specialty:'جلدية', photo:'https://randomuser.me/api/portraits/women/68.jpg', clinicPhotos:['https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop','https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop'], bio:'اختصاصي جلدية وتجميل بالليزر، عضوة الجمعية السورية.', mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.31!3d33.51!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMwJzM2LjAiTiAzNsKwMTgnMzYuMCJF!5e0!3m2!1sar!2s!4v1700000000000', price:'5,000 ل.س', whatsapp:'963934175735', initials:'ع.ش',
+            schedule: { 'السبت - الأربعاء':'10ص - 6م', 'الخميس':'10ص - 2م', 'الجمعة':'مغلق' } },
+        { id:3, name:'د. عبدالحمن الشيخ', specialty:'أطفال', photo:'https://randomuser.me/api/portraits/men/45.jpg', clinicPhotos:['https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=400&h=300&fit=crop','https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400&h=300&fit=crop'], bio:'أستاذ طب الأطفال، خبرة 15 عاماً في اللقاحات والنمو.', mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.29!3d33.49!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDI5JzI0LjAiTiAzNsKwMTcnMjQuMCJF!5e0!3m2!1sar!2s!4v1700000000000', price:'10,000 ل.س', whatsapp:'963934175735', initials:'ع.ش',
+            schedule: { 'الأحد - الخميس':'8ص - 4م', 'السبت':'9ص - 1م', 'الجمعة':'مغلق' } },
+        { id:4, name:'د. عبدالحمن الحسين', specialty:'نسائية', photo:'https://randomuser.me/api/portraits/women/33.jpg', clinicPhotos:['https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop','https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=400&h=300&fit=crop'], bio:'اختصاصي نسائية وتوليد، رعاية الحوامل والولادة الطبيعية.', mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.32!3d33.52!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMxJzEyLjAiTiAzNsKwMTknMTIuMCJF!5e0!3m2!1sar!2s!4v1700000000000', price:'18,000 ل.س', whatsapp:'963934175735', initials:'ع.ش',
+            schedule: { 'السبت - الثلاثاء':'10ص - 5م', 'الأربعاء':'10ص - 3م', 'الخميس والجمعة':'مغلق' } },
+        { id:5, name:'د. عبدالحمن القاضي', specialty:'عيون', photo:'https://randomuser.me/api/portraits/men/22.jpg', clinicPhotos:['https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=400&h=300&fit=crop','https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop'], bio:'جراح عيون، عمليات الليزك والمياه البيضاء.', mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.28!3d33.48!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDI4JzQ4LjAiTiAzNsKwMTYnNDguMCJF!5e0!3m2!1sar!2s!4v1700000000000', price:'25,000 ل.س', whatsapp:'963934175735', initials:'ع.ش',
+            schedule: { 'السبت - الخميس':'9ص - 7م', 'الجمعة':'مغلق' } },
+        { id:6, name:'د. عبدالحمن عبد الله', specialty:'عامة', photo:'https://randomuser.me/api/portraits/women/47.jpg', clinicPhotos:['https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop','https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop'], bio:'طب أسرة، استشارات ورعاية صحية شاملة.', mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.305!3d33.505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMwJzE4LjAiTiAzNsKwMTgnMTguMCJF!5e0!3m2!1sar!2s!4v1700000000000', price:'10,000 ل.س', whatsapp:'963934175735', initials:'ع.ش',
+            schedule: { 'الأحد - الخميس':'8:30ص - 3م', 'السبت':'9ص - 12ظ', 'الجمعة':'مغلق' } }
+    ];
+
+    // بناء الفلاتر
+    function buildFilters() {
+        const container = document.getElementById('filterContainer');
+        const specialties = [...new Set(doctors.map(d => d.specialty))];
+        specialties.sort();
+        let html = `<button class="filter-btn active" data-filter="all"><i class="fa-solid fa-list"></i> الكل</button>`;
+        const icons = { 'أسنان':'fa-tooth', 'جلدية':'fa-hand-sparkles', 'أطفال':'fa-child', 'نسائية':'fa-female', 'عيون':'fa-eye', 'عامة':'fa-user-doctor' };
+        specialties.forEach(s => {
+            let icon = icons[s] || 'fa-stethoscope';
+            html += `<button class="filter-btn" data-filter="${s}"><i class="fa-solid ${icon}"></i> ${s}</button>`;
+        });
+        container.innerHTML = html;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderDoctors(btn.dataset.filter);
+            });
+        });
+    }
+
+    // عرض الأطباء
+    function renderDoctors(filter = 'all') {
+        const grid = document.getElementById('doctorsGrid');
+        const filtered = filter === 'all' ? doctors : doctors.filter(d => d.specialty === filter);
+        document.getElementById('doctorCount').innerText = filtered.length;
+        if(filtered.length === 0) {
+            grid.innerHTML = `<div style="text-align:center; padding:50px; color:#8aa296;">لا يوجد أطباء</div>`;
+            return;
+        }
+        const iconsMap = { 'أسنان':'fa-tooth', 'جلدية':'fa-hand-sparkles', 'أطفال':'fa-child', 'نسائية':'fa-female', 'عيون':'fa-eye', 'عامة':'fa-user-doctor' };
+        grid.innerHTML = filtered.map(doc => {
+            let icon = iconsMap[doc.specialty] || 'fa-stethoscope';
+            return `
+            <div class="doctor-card" onclick="openDetail(${doc.id})">
+                <div class="doc-avatar">
+                    <img src="${doc.photo}" onerror="this.style.display='none';this.parentElement.querySelector('.doc-initials').style.display='flex';">
+                    <div class="doc-initials" style="display:none;">${doc.initials}</div>
+                </div>
+                <div class="doc-name">${doc.name}</div>
+                <div class="doc-spec"><i class="fa-solid ${icon}"></i> ${doc.specialty}</div>
+                <button class="detail-btn" onclick="event.stopPropagation(); openDetail(${doc.id});"><i class="fa-regular fa-eye"></i> تفاصيل</button>
+            </div>`;
+        }).join('');
+    }
+
+    let currentDoctor = null;
+    function openDetail(id) {
+        const doc = doctors.find(d => d.id === id);
+        if(!doc) return;
+        currentDoctor = doc;
+        document.getElementById('detailDoctorName').innerText = doc.name;
+        document.getElementById('detailName').innerText = doc.name;
+        document.getElementById('detailSpecialty').innerText = doc.specialty;
+        document.getElementById('detailBio').innerText = doc.bio;
+        document.getElementById('detailPrice').innerText = doc.price;
+        document.getElementById('detailMap').src = doc.mapEmbedUrl;
+        document.getElementById('modalDoctorName').innerHTML = `حجز مع ${doc.name}`;
+        document.getElementById('scheduleContent').innerHTML = Object.entries(doc.schedule).map(([day, hours]) => `<div class="schedule-row"><span>${day}</span><span>${hours}</span></div>`).join('');
+        document.getElementById('doubleGallery').innerHTML = `
+            <div class="gallery-img"><img src="${doc.photo}"><span class="img-caption">الطبيب</span></div>
+            <div class="gallery-img"><img src="${doc.clinicPhotos[0]}"><span class="img-caption">العيادة</span></div>
+        `;
+        document.getElementById('home-section').style.display = 'none';
+        document.getElementById('doctor-section').style.display = 'block';
+        window.scrollTo(0,0);
+    }
+    function goBack() {
+        document.getElementById('doctor-section').style.display = 'none';
+        document.getElementById('home-section').style.display = 'block';
+        document.getElementById('detailMap').src = '';
+        currentDoctor = null;
+    }
+    function openBookingModal() {
+        if(!currentDoctor) return;
+        document.getElementById('bookingModal').classList.remove('hidden');
+        document.getElementById('bookingForm').reset();
+    }
+    function closeBookingModal() {
+        document.getElementById('bookingModal').classList.add('hidden');
+    }
+    
+    // إرسال الحجز
+    document.getElementById('bookingForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(!currentDoctor) return;
+        const name = document.getElementById('patientName').value.trim();
+        const age = document.getElementById('patientAge').value.trim();
+        const phone = document.getElementById('patientPhone').value.trim();
+        const reason = document.getElementById('visitReason').value.trim();
+        
+        if(!name || !age || !phone) {
+            showToast('يرجى ملء جميع الحقول الأساسية');
+            return;
+        }
+        
+        let msg = `🩺 *حجز موعد جديد - طبيبك*\n\n`;
+        msg += `━━━━━━━━━━━━━━━━\n`;
+        msg += `👨‍⚕️ *بيانات الطبيب*\n`;
+        msg += `\n`;
+        msg += `• الاسم: ${currentDoctor.name}\n`;
+        msg += `• الاختصاص: ${currentDoctor.specialty}\n`;
+        msg += `• سعر الكشف: ${currentDoctor.price}\n\n`;
+        msg += `━━━━━━━━━━━━━━━━\n`;
+        msg += `📋 *بيانات المريض*\n`;
+        msg += `\n`;
+        msg += `• الاسم: ${name}\n`;
+        msg += `• العمر: ${age} سنة\n`;
+        msg += `• الهاتف: ${phone}\n`;
+        if(reason) {
+            msg += `• سبب الزيارة: ${reason}\n`;
+        }
+        msg += `\n━━━━━━━━━━━━━━━\n`;
+        msg += `💳 *طريقة الدفع:* شام كاش / نقدي\n\n`;
+        msg += `━━━━━━━━━━━━━━━━━\n`;
+        msg += `📱 تم الإرسال عبر تطبيق طبيبك`;
+        
+        const encodedMsg = encodeURIComponent(msg);
+        closeBookingModal();
+        window.open(`https://wa.me/${currentDoctor.whatsapp.replace(/\+/,'')}?text=${encodedMsg}`, '_blank');
+        showToast('جاري التوجيه إلى واتساب');
+    });
+    
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+    
+    // إغلاق المودال عند النقر خارج المحتوى
+    window.onclick = (e) => {
+        const modal = document.getElementById('bookingModal');
+        if(e.target === modal) closeBookingModal();
+    };
+    
+    buildFilters();
+    renderDoctors();
+</script>
+</body>
+</html>
