@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>طبيبك</title>
+    <title>طبيبك - دليل الأطباء</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -261,7 +261,11 @@
             background: #f0f5f2;
             position: relative;
         }
-        .gallery-img img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .img-caption {
             position: absolute;
             bottom: 12px;
@@ -271,6 +275,7 @@
             border-radius: 40px;
             font-size: 12px;
             color: white;
+            font-weight: 500;
         }
         .info-card {
             background: white;
@@ -355,7 +360,7 @@
             gap: 10px;
             cursor: pointer;
         }
-        
+
         /* المودال */
         .modal {
             position: fixed;
@@ -475,7 +480,7 @@
 <body>
 <div class="app-container">
     <div id="home-section">
-        <div class="header"><span class="logo-text">طبيبك</span></div>
+        <div class="header"><span class="logo-text"> طبيبك</span></div>
         <div class="hero-section">
             <div class="hero-icon"><i class="fa-solid fa-heart-pulse"></i></div>
             <h1 class="hero-title">صحتك أمانتك</h1>
@@ -536,18 +541,77 @@
             </div>
             <button type="submit" class="send-btn"><i class="fa-brands fa-whatsapp"></i> إرسال الطلب</button>
         </form>
-        <!-- زر الإلغاء مع onclick مباشر -->
         <button type="button" class="cancel-btn" onclick="closeBookingModal()">إلغاء</button>
     </div>
 </div>
 <div id="toast" class="toast"></div>
 
 <script>
-    // بيانات الأطباء
+    // ======================= بيانات الأطباء =======================
+    // كل طبيب يحتوي الآن على:
+    // waitingRoomImg : صورة غرفة الانتظار
+    // clinicRoomImg  : صورة العيادة
     const doctors = [
-        { id:1, name:'د. عبدالحمن الشيخ', specialty:'أسنان', photo:'https://raw.githubusercontent.com/2001abdalrahman2001-pixel/doctor/ad77f92ffa9909a07f615388f21a863b1832e70e/IMG_20220524_110115_112.jpg', clinicPhotos:['',''], bio:'خبرة 5 عاماً في تجميل وزراعة الأسنان، بتقنيات حديثة.', mapEmbedUrl:'', price:'5,000 ل.س', whatsapp:'963934175735', initials:'ع.ش',
-            schedule: { 'السبت - الخميس':'9ص - 5م', 'الجمعة':'مغلق' } },
-        
+        { 
+            id:1, name:'د. أحمد الخطيب', specialty:'أسنان', 
+            photo:'https://randomuser.me/api/portraits/men/32.jpg',
+            waitingRoomImg:'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop',
+            clinicRoomImg:'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&h=300&fit=crop',
+            bio:'خبرة 12 عاماً في تجميل وزراعة الأسنان، تقنيات حديثة.', 
+            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.3!3d33.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMwJzAwLjAiTiAzNsKwMTgnMDAuMCJF!5e0!3m2!1sar!2s!4v1700000000000', 
+            price:'15,000 ل.س', whatsapp:'+9639934175735', initials:'أ.خ',
+            schedule: { 'السبت - الخميس':'9ص - 5م', 'الجمعة':'مغلق' } 
+        },
+        { 
+            id:2, name:'د. سارة العلي', specialty:'جلدية', 
+            photo:'https://randomuser.me/api/portraits/women/68.jpg',
+            waitingRoomImg:'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+            clinicRoomImg:'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop', 
+            bio:'اختصاصية جلدية وتجميل بالليزر، عضوة الجمعية السورية.', 
+            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.31!3d33.51!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMwJzM2LjAiTiAzNsKwMTgnMzYuMCJF!5e0!3m2!1sar!2s!4v1700000000000', 
+            price:'20,000 ل.س', whatsapp:'+9639934175735', initials:'س.ع',
+            schedule: { 'السبت - الأربعاء':'10ص - 6م', 'الخميس':'10ص - 2م', 'الجمعة':'مغلق' } 
+        },
+        { 
+            id:3, name:'د. محمد الشيخ', specialty:'أطفال', 
+            photo:'https://randomuser.me/api/portraits/men/45.jpg',
+            waitingRoomImg:'https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=400&h=300&fit=crop',
+            clinicRoomImg:'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400&h=300&fit=crop', 
+            bio:'أستاذ طب الأطفال، خبرة 15 عاماً في اللقاحات والنمو.', 
+            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.29!3d33.49!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDI5JzI0LjAiTiAzNsKwMTcnMjQuMCJF!5e0!3m2!1sar!2s!4v1700000000000', 
+            price:'12,000 ل.س', whatsapp:'+9639934175735', initials:'م.ش',
+            schedule: { 'الأحد - الخميس':'8ص - 4م', 'السبت':'9ص - 1م', 'الجمعة':'مغلق' } 
+        },
+        { 
+            id:4, name:'د. رنا الحسين', specialty:'نسائية', 
+            photo:'https://randomuser.me/api/portraits/women/33.jpg',
+            waitingRoomImg:'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop',
+            clinicRoomImg:'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=400&h=300&fit=crop', 
+            bio:'اختصاصية نسائية وتوليد، رعاية الحوامل والولادة الطبيعية.', 
+            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.32!3d33.52!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMxJzEyLjAiTiAzNsKwMTknMTIuMCJF!5e0!3m2!1sar!2s!4v1700000000000', 
+            price:'18,000 ل.س', whatsapp:'+9639934175735', initials:'ر.ح',
+            schedule: { 'السبت - الثلاثاء':'10ص - 5م', 'الأربعاء':'10ص - 3م', 'الخميس والجمعة':'مغلق' } 
+        },
+        { 
+            id:5, name:'د. عمر القاضي', specialty:'عيون', 
+            photo:'https://randomuser.me/api/portraits/men/22.jpg',
+            waitingRoomImg:'https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=400&h=300&fit=crop',
+            clinicRoomImg:'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop', 
+            bio:'جراح عيون، عمليات الليزك والمياه البيضاء.', 
+            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.28!3d33.48!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDI4JzQ4LjAiTiAzNsKwMTYnNDguMCJF!5e0!3m2!1sar!2s!4v1700000000000', 
+            price:'25,000 ل.س', whatsapp:'+9639934175735', initials:'ع.ق',
+            schedule: { 'السبت - الخميس':'9ص - 7م', 'الجمعة':'مغلق' } 
+        },
+        { 
+            id:6, name:'د. ليلى عبد الله', specialty:'عامة', 
+            photo:'https://randomuser.me/api/portraits/women/47.jpg',
+            waitingRoomImg:'https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop',
+            clinicRoomImg:'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop', 
+            bio:'طب أسرة، استشارات ورعاية صحية شاملة.', 
+            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.5!2d36.305!3d33.505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMwJzE4LjAiTiAzNsKwMTgnMTguMCJF!5e0!3m2!1sar!2s!4v1700000000000', 
+            price:'10,000 ل.س', whatsapp:'+9639934175735', initials:'ل.ع',
+            schedule: { 'الأحد - الخميس':'8:30ص - 3م', 'السبت':'9ص - 12ظ', 'الجمعة':'مغلق' } 
+        }
     ];
 
     // بناء الفلاتر
@@ -609,14 +673,25 @@
         document.getElementById('detailMap').src = doc.mapEmbedUrl;
         document.getElementById('modalDoctorName').innerHTML = `حجز مع ${doc.name}`;
         document.getElementById('scheduleContent').innerHTML = Object.entries(doc.schedule).map(([day, hours]) => `<div class="schedule-row"><span>${day}</span><span>${hours}</span></div>`).join('');
-        document.getElementById('doubleGallery').innerHTML = `
-            <div class="gallery-img"><img src="${doc.photo}"><span class="img-caption">غرفة انتظار</span></div>
-            <div class="gallery-img"><img src="${doc.clinicPhotos[0]}"><span class="img-caption">غرفة معاينة</span></div>
+        
+        // ========== عرض الصورتين: الأولى لغرفة الانتظار، الثانية للعيادة ==========
+        const galleryContainer = document.getElementById('doubleGallery');
+        galleryContainer.innerHTML = `
+            <div class="gallery-img">
+                <img src="${doc.waitingRoomImg}" alt="غرفة الانتظار" onerror="this.src='https://placehold.co/400x300?text=غرفة+الانتظار'">
+                <span class="img-caption">🪑 غرفة الانتظار</span>
+            </div>
+            <div class="gallery-img">
+                <img src="${doc.clinicRoomImg}" alt="العيادة" onerror="this.src='https://placehold.co/400x300?text=العيادة'">
+                <span class="img-caption">🏥 العيادة</span>
+            </div>
         `;
+        
         document.getElementById('home-section').style.display = 'none';
         document.getElementById('doctor-section').style.display = 'block';
         window.scrollTo(0,0);
     }
+    
     function goBack() {
         document.getElementById('doctor-section').style.display = 'none';
         document.getElementById('home-section').style.display = 'block';
@@ -646,15 +721,15 @@
             return;
         }
         
-        let msg = `🩺 *حجز موعد جديد - طبيبك*\n\n`;
+        let msg = `🩺 **حجز موعد جديد - طبيبك**\n\n`;
         msg += `━━━━━━━━━━━━━━━━\n`;
-        msg += `👨‍⚕️ *بيانات الطبيب*\n`;
+        msg += `👨‍⚕️ **بيانات الطبيب**\n`;
         msg += `\n`;
         msg += `• الاسم: ${currentDoctor.name}\n`;
         msg += `• الاختصاص: ${currentDoctor.specialty}\n`;
         msg += `• سعر الكشف: ${currentDoctor.price}\n\n`;
         msg += `━━━━━━━━━━━━━━━━\n`;
-        msg += `📋 *بيانات المريض*\n`;
+        msg += `📋 **بيانات المريض**\n`;
         msg += `\n`;
         msg += `• الاسم: ${name}\n`;
         msg += `• العمر: ${age} سنة\n`;
@@ -662,9 +737,9 @@
         if(reason) {
             msg += `• سبب الزيارة: ${reason}\n`;
         }
-        msg += `\n━━━━━━━━━━━━━━━\n`;
-        msg += `💳 *طريقة الدفع:* شام كاش / نقدي\n\n`;
-        msg += `━━━━━━━━━━━━━━━━━\n`;
+        msg += `\n━━━━━━━━━━━━━━\n`;
+        msg += `💳 **طريقة الدفع:** شام كاش / نقدي\n\n`;
+        msg += `━━━━━━━━━━━━━━━━\n`;
         msg += `📱 تم الإرسال عبر تطبيق طبيبك`;
         
         const encodedMsg = encodeURIComponent(msg);
@@ -680,7 +755,6 @@
         setTimeout(() => toast.classList.remove('show'), 2000);
     }
     
-    // إغلاق المودال عند النقر خارج المحتوى
     window.onclick = (e) => {
         const modal = document.getElementById('bookingModal');
         if(e.target === modal) closeBookingModal();
