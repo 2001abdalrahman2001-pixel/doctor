@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>طبيبك | دليل الأطباء الموثوق</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -153,6 +151,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            transition: 0.2s;
         }
         .filter-btn.active {
             background: #0d6e48;
@@ -264,35 +263,79 @@
             font-size: 20px;
             cursor: pointer;
         }
-        .gallery {
-            display: flex;
-            gap: 14px;
-            padding: 18px 16px 12px;
+        
+        .gallery-container {
+            background: white;
+            padding: 16px 16px 0;
         }
-        .gallery-img {
-            flex: 1;
-            border-radius: 28px;
+        .main-image {
+            width: 100%;
+            height: 280px;
+            border-radius: 24px;
             overflow: hidden;
-            aspect-ratio: 1 / 0.85;
             background: #f0f5f2;
             position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .gallery-img img {
+        .main-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .img-caption {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.6);
-            padding: 4px 14px;
-            border-radius: 40px;
-            font-size: 12px;
-            color: white;
+        .main-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #eef7f2, #d4e6de);
+            color: #0d6e48;
+            font-size: 48px;
+            gap: 12px;
+        }
+        .main-image-placeholder span {
+            font-size: 14px;
             font-weight: 500;
         }
+        .thumbnail-gallery {
+            display: flex;
+            gap: 12px;
+            padding: 16px 0;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+            background: #f0f3f0;
+            flex-shrink: 0;
+        }
+        .thumbnail.active {
+            border-color: #0d6e48;
+            transform: scale(0.95);
+        }
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e0eae4;
+            color: #0d6e48;
+            font-size: 24px;
+        }
+
         .info-card {
             background: white;
             margin: 16px 18px;
@@ -510,6 +553,18 @@
             transition: 0.2s;
         }
         .toast.show { opacity: 1; }
+        
+        /* مؤشر التحميل */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 16px;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
 <body>
@@ -528,11 +583,9 @@
             <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-eye"></i></div><span class="quick-label">عيون</span></div>
         </div>
 
-        <!-- قسم العنوان مع فلتر المدينة وعداد الأطباء (تم التبادل) -->
         <div class="section-head">
           <div class="title-wrapper">
                 <h2>أفضل أطباء</h2>
-                
             </div>
             <select id="cityFilterSelect" class="city-filter">
                 <option value="الطبقة"> الطبقة</option>
@@ -543,7 +596,11 @@
         </div>
 
         <div class="filter-bar" id="filterContainer"></div>
-        <div class="doctors-list" id="doctorsGrid"></div>
+        <div class="doctors-list" id="doctorsGrid">
+            <div style="text-align:center; padding:50px;">
+                <i class="fa-solid fa-spinner fa-pulse"></i> جاري التحميل...
+            </div>
+        </div>
     </div>
 
     <div id="doctor-section">
@@ -551,7 +608,17 @@
             <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-right"></i></button>
             <span id="detailDoctorName"></span>
         </div>
-        <div class="gallery" id="doubleGallery"></div>
+        
+        <div class="gallery-container">
+            <div class="main-image" id="mainImage">
+                <div class="main-image-placeholder">
+                    <i class="fa-solid fa-image"></i>
+                    <span>تحميل الصورة...</span>
+                </div>
+            </div>
+            <div class="thumbnail-gallery" id="thumbnailGallery"></div>
+        </div>
+        
         <div class="info-card">
             <div class="detail-name" id="detailName"></div>
             <span class="detail-spec" id="detailSpecialty"></span>
@@ -560,7 +627,6 @@
                 <h4><i class="fa-regular fa-clock"></i> ساعات العمل</h4>
                 <div id="scheduleContent"></div>
             </div>
-            <!-- حقل الموقع النصي -->
             <div class="location-text" id="detailLocationBlock">
                 <i class="fa-solid fa-location-dot"></i>
                 <div class="loc-detail" id="detailLocationText">---</div>
@@ -575,7 +641,6 @@
     </div>
 </div>
 
-<!-- مودال الحجز -->
 <div class="modal hidden" id="bookingModal">
     <div class="modal-content">
         <div class="modal-handle"></div>
@@ -587,8 +652,8 @@
             <div class="form-field"><label>العمر</label><input type="number" id="patientAge" required></div>
             <div class="form-field"><label>رقم الهاتف</label><input type="tel" id="patientPhone" required></div>
             <div class="form-field">
-                <label><i class="fa-regular fa-note-sticky"></i> سبب الزيارة (اختياري)</label>
-                <textarea id="visitReason" rows="2" placeholder="مثال: ألم في الأسنان، كحة، فحص دوري..."></textarea>
+                <label><i class="fa-regular fa-note-sticky"></i> المكان القادم منه </label>
+                <textarea id="visitReason" rows="2" placeholder="مثال: السويدية، المنصورة، البوعاصي..." required></textarea>
             </div>
             <button type="submit" class="send-btn"><i class="fa-brands fa-whatsapp"></i> إرسال الطلب</button>
         </form>
@@ -598,14 +663,24 @@
 <div id="toast" class="toast"></div>
 
 <script>
-    // بيانات الأطباء (مع حقل المدينة والموقع النصي)
+    // تحسين: استخدام صور مصغرة أصغر حجماً للتحميل السريع
     const doctors = [
         { 
             id:1, name:'د. عبدالرحمن الشيخ', specialty:'أسنان', city:'الطبقة',
             locationText:'شارع الثورة، عمارة النور، الطابق الثالث، قرب دوار البلد - الطبقة',
             photo:'https://raw.githubusercontent.com/2001abdalrahman2001-pixel/doctor/ad77f92ffa9909a07f615388f21a863b1832e70e/IMG_20220524_110115_112.jpg',
-            waitingRoomImg:'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-            clinicRoomImg:'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&h=300&fit=crop',
+            gallery: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop'
+            ],
+            galleryThumbs: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop'
+            ],
+            galleryLabels: ['غرفة الانتظار', 'غرفة المعاينة', 'الأجهزة الطبية'],
+            galleryIcons: ['fa-couch', 'fa-stethoscope', 'fa-microscope'],
             bio:'خبرة 12 عاماً في تجميل وزراعة الأسنان، تقنيات حديثة.', 
             mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
             price:'15,000 ل.س', whatsapp:'963934175735', initials:'أ.خ',
@@ -615,8 +690,18 @@
             id:2, name:'د. منار الحسن', specialty:'جلدية', city:'الرقة',
             locationText:'شارع القوتلي، بناء الهلال، مجمع الشفاء الطبي - الرقة',
             photo:'',
-            waitingRoomImg:'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-            clinicRoomImg:'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop', 
+            gallery: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop'
+            ],
+            galleryThumbs: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop'
+            ],
+            galleryLabels: ['غرفة الانتظار', 'عيادة الجلدية', 'غرفة الليزر'],
+            galleryIcons: ['fa-couch', 'fa-hand-sparkles', 'fa-sun'],
             bio:'اختصاصية جلدية وتجميل بالليزر، عضوة الجمعية السورية.', 
             mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',  
             price:'20,000 ل.س', whatsapp:'963934175735', initials:'م.ح',
@@ -626,8 +711,18 @@
             id:3, name:'د. رامي العلي', specialty:'أطفال', city:'الطبقة',
             locationText:'حي المفتي، قرب مستشفى الطبقة الوطني - عمارة الأمل، طابق أول',
             photo:'',
-            waitingRoomImg:'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-            clinicRoomImg:'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop', 
+            gallery: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop'
+            ],
+            galleryThumbs: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=100&h=100&fit=crop'
+            ],
+            galleryLabels: ['غرفة اللعب', 'عيادة الأطفال', 'غرفة التطعيم'],
+            galleryIcons: ['fa-child', 'fa-stethoscope', 'fa-syringe'],
             bio:'أستاذ طب الأطفال، خبرة 15 عاماً في اللقاحات والنمو.', 
             mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
             price:'12,000 ل.س', whatsapp:'963934175735', initials:'ر.ع',
@@ -637,8 +732,18 @@
             id:4, name:'د. سلمى ناصر', specialty:'نسائية', city:'الرقة',
             locationText:'شارع النعيم، بناية الفردوس، عيادات الدكتورة سلمى - الرقة',
             photo:'',
-            waitingRoomImg:'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-            clinicRoomImg:'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop', 
+            gallery: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop'
+            ],
+            galleryThumbs: [
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop'
+            ],
+            galleryLabels: ['غرفة الانتظار', 'غرفة الكشف', 'وحدة الولادة'],
+            galleryIcons: ['fa-couch', 'fa-female', 'fa-baby-carriage'],
             bio:'اختصاصية نسائية وتوليد، رعاية الحوامل والولادة الطبيعية.', 
             mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
             price:'18,000 ل.س', whatsapp:'963934175735', initials:'س.ن',
@@ -648,8 +753,18 @@
             id:5, name:'د. ياسر الخطيب', specialty:'عيون', city:'الطبقة',
             locationText:'شارع ميسلون، مجمع النور الطبي، الدور الثالث، دمشق',
             photo:'',
-            waitingRoomImg:'https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=400&h=300&fit=crop',
-            clinicRoomImg:'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop', 
+            gallery: [
+                'https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop'
+            ],
+            galleryThumbs: [
+                'https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop'
+            ],
+            galleryLabels: ['غرفة الفحص', 'غرفة العمليات', 'جهاز الليزك'],
+            galleryIcons: ['fa-eye', 'fa-scalpel', 'fa-laser'],
             bio:'جراح عيون، عمليات الليزك والمياه البيضاء.',
             mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
             price:'25,000 ل.س', whatsapp:'963934175735', initials:'ي.خ',
@@ -659,8 +774,18 @@
             id:6, name:'د. لينا عثمان', specialty:'عامة', city:'الطبقة',
             locationText:'شارع السوق المركزي، بناية الصحة، طابق أرضي - الطبقة',
             photo:'',
-            waitingRoomImg:'https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop',
-            clinicRoomImg:'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop', 
+            gallery: [
+                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop'
+            ],
+            galleryThumbs: [
+                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
+                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop'
+            ],
+            galleryLabels: ['غرفة الاستقبال', 'عيادة الباطنية', 'غرفة الفحوصات'],
+            galleryIcons: ['fa-user-md', 'fa-stethoscope', 'fa-flask'],
             bio:'طب أسرة، استشارات ورعاية صحية شاملة.', 
             mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
             price:'10,000 ل.س', whatsapp:'963934175735', initials:'ل.ع',
@@ -669,7 +794,53 @@
     ];
 
     let currentSpecialtyFilter = 'all';
-    let currentCityFilter = 'الطبقة';   // القيمة الافتراضية: أول مدينة
+    let currentCityFilter = 'الطبقة';
+    let currentDoctor = null;
+    let currentImageIndex = 0;
+
+    // دوال معرض الصور المحسنة
+    function displayMainImage(index, doctor) {
+        const mainContainer = document.getElementById('mainImage');
+        if (!doctor || !doctor.gallery || !doctor.gallery[index]) return;
+        
+        const imageUrl = doctor.gallery[index];
+        const label = doctor.galleryLabels[index] || 'صورة العيادة';
+        const icon = doctor.galleryIcons[index] || 'fa-image';
+        
+        // استخدام lazy loading للصورة الرئيسية
+        mainContainer.innerHTML = `
+            <img src="${imageUrl}" alt="${label}" loading="lazy" decoding="async" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'main-image-placeholder\'><i class=\'fa-solid ${icon}\'></i><span>${label}</span></div>';">
+        `;
+        
+        document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+            thumb.classList.toggle('active', i === index);
+        });
+    }
+    
+    function buildThumbnails(doctor) {
+        const galleryContainer = document.getElementById('thumbnailGallery');
+        if (!doctor || !doctor.gallery) return;
+        
+        // استخدام الصور المصغرة المحسنة
+        const thumbs = doctor.galleryThumbs || doctor.gallery;
+        
+        galleryContainer.innerHTML = doctor.gallery.map((_, idx) => {
+            const thumbUrl = thumbs[idx];
+            const label = doctor.galleryLabels[idx] || 'صورة';
+            const icon = doctor.galleryIcons[idx] || 'fa-image';
+            return `
+                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="switchImage(${idx})">
+                    <img src="${thumbUrl}" alt="${label}" loading="lazy" decoding="async" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'thumbnail-placeholder\'><i class=\'fa-solid ${icon}\'></i></div>';">
+                </div>
+            `;
+        }).join('');
+    }
+    
+    function switchImage(index) {
+        if (!currentDoctor) return;
+        currentImageIndex = index;
+        displayMainImage(index, currentDoctor);
+    }
 
     function buildFilters() {
         const container = document.getElementById('filterContainer');
@@ -698,7 +869,6 @@
             currentCityFilter = e.target.value;
             renderDoctors();
         });
-        // ضبط القيمة الافتراضية
         citySelect.value = currentCityFilter;
     }
 
@@ -707,7 +877,6 @@
         if (currentSpecialtyFilter !== 'all') {
             filtered = filtered.filter(d => d.specialty === currentSpecialtyFilter);
         }
-        // فلتر المدينة (لم يعد هناك خيار "الكل")
         filtered = filtered.filter(d => d.city === currentCityFilter);
         return filtered;
     }
@@ -716,32 +885,43 @@
         const grid = document.getElementById('doctorsGrid');
         const filtered = getFilteredDoctors();
         document.getElementById('doctorCount').innerText = filtered.length;
+        
         if(filtered.length === 0) {
             grid.innerHTML = `<div style="text-align:center; padding:50px; color:#8aa296;">لا يوجد أطباء في هذه المدينة مع التخصص المختار</div>`;
             return;
         }
+        
+        // تحسين الأداء: استخدام DocumentFragment
+        const fragment = document.createDocumentFragment();
         const iconsMap = { 'أسنان':'fa-tooth', 'جلدية':'fa-hand-sparkles', 'أطفال':'fa-child', 'نسائية':'fa-female', 'عيون':'fa-eye', 'عامة':'fa-user-doctor' };
-        grid.innerHTML = filtered.map(doc => {
+        
+        filtered.forEach(doc => {
             let icon = iconsMap[doc.specialty] || 'fa-stethoscope';
-            return `
-            <div class="doctor-card" onclick="openDetail(${doc.id})">
+            const card = document.createElement('div');
+            card.className = 'doctor-card';
+            card.onclick = () => openDetail(doc.id);
+            card.innerHTML = `
                 <div class="doc-avatar">
-                    <img src="${doc.photo}" onerror="this.style.display='none';this.parentElement.querySelector('.doc-initials').style.display='flex';">
+                    <img src="${doc.photo}" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.querySelector('.doc-initials').style.display='flex';">
                     <div class="doc-initials" style="display:none;">${doc.initials}</div>
                 </div>
                 <div class="doc-name">${doc.name}</div>
                 <div class="doc-spec"><i class="fa-solid ${icon}"></i> ${doc.specialty}</div>
                 <button class="detail-btn" onclick="event.stopPropagation(); openDetail(${doc.id});"><i class="fa-regular fa-eye"></i> تفاصيل</button>
-            </div>`;
-        }).join('');
+            `;
+            fragment.appendChild(card);
+        });
+        
+        grid.innerHTML = '';
+        grid.appendChild(fragment);
     }
-
-    let currentDoctor = null;
 
     function openDetail(id) {
         const doc = doctors.find(d => d.id === id);
         if(!doc) return;
         currentDoctor = doc;
+        currentImageIndex = 0;
+        
         document.getElementById('detailDoctorName').innerText = doc.name;
         document.getElementById('detailName').innerText = doc.name;
         document.getElementById('detailSpecialty').innerText = doc.specialty;
@@ -749,24 +929,15 @@
         document.getElementById('detailPrice').innerText = doc.price;
         document.getElementById('detailMap').src = doc.mapEmbedUrl;
         document.getElementById('modalDoctorName').innerHTML = `حجز مع ${doc.name}`;
-
+        
+        buildThumbnails(doc);
+        displayMainImage(0, doc);
+        
         const scheduleDiv = document.getElementById('scheduleContent');
         scheduleDiv.innerHTML = Object.entries(doc.schedule).map(([day, hours]) => `<div class="schedule-row"><span>${day}</span><span>${hours}</span></div>`).join('');
         
         const locationDiv = document.getElementById('detailLocationText');
         locationDiv.innerText = doc.locationText || 'لم يتم تحديد العنوان التفصيلي، يرجى الاتصال للاستفسار';
-        
-        const galleryContainer = document.getElementById('doubleGallery');
-        galleryContainer.innerHTML = `
-            <div class="gallery-img">
-                <img src="${doc.waitingRoomImg}" alt="غرفة الانتظار" onerror="this.src='https://placehold.co/400x300?text=غرفة+الانتظار'">
-                
-            </div>
-            <div class="gallery-img">
-                <img src="${doc.clinicRoomImg}" alt="غرفة المعاينة" onerror="this.src='https://placehold.co/400x300?text=العيادة'">
-                
-            </div>
-        `;
         
         document.getElementById('home-section').style.display = 'none';
         document.getElementById('doctor-section').style.display = 'block';
@@ -798,8 +969,8 @@
         const phone = document.getElementById('patientPhone').value.trim();
         const reason = document.getElementById('visitReason').value.trim();
         
-        if(!name || !age || !phone) {
-            showToast('يرجى ملء جميع الحقول الأساسية');
+        if(!name || !age || !phone || !reason) {
+            showToast('يرجى ملء جميع الحقول');
             return;
         }
         
@@ -816,7 +987,7 @@
         msg += `• الاسم: ${name}\n`;
         msg += `• العمر: ${age} سنة\n`;
         msg += `• الهاتف: ${phone}\n`;
-        if(reason) msg += `• سبب الزيارة: ${reason}\n`;
+        if(reason) msg += `• المكان القادم منه: ${reason}\n`;
         msg += `\n━━━━━━━━━━━━━━\n`;
         msg += `💳 طريقة الدفع: شام كاش / نقدي\n`;
         msg += `━━━━━━━━━━━━━━━━\n📱 تم الإرسال عبر تطبيق طبيبك`;
@@ -839,9 +1010,14 @@
         if(e.target === modal) closeBookingModal();
     };
     
-    buildFilters();
-    initCityFilter();
-    renderDoctors();
+    // تأخير التحميل الأولي للصور
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            buildFilters();
+            initCityFilter();
+            renderDoctors();
+        }, 100);
+    });
 </script>
 </body>
 </html>
