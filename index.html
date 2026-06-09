@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>طبيبك | دليل الأطباء الموثوق</title>
+    <title>طبيبك</title>
+    <!-- أيقونات Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ============================
+           إعادة تعيين القيم الأساسية
+           ============================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Tajawal', sans-serif;
             background: #f5f7f5;
@@ -17,6 +26,10 @@
             direction: rtl;
             padding: 10px;
         }
+
+        /* ============================
+           الحاوية الرئيسية للتطبيق
+           ============================ */
         .app-container {
             width: 100%;
             max-width: 500px;
@@ -26,14 +39,31 @@
             overflow: hidden;
             position: relative;
         }
-        #home-section { display: block; }
-        #doctor-section { display: none; }
 
+        /* إخفاء/إظهار الصفحات */
+        #home-section {
+            display: block;
+        }
+
+        #doctor-section {
+            display: none;
+        }
+
+        #settings-section {
+            display: none;
+        }
+
+        /* ============================
+           الهيدر المشترك
+           ============================ */
         .header {
             background: #0d6e48;
             padding: 18px 20px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
         .logo-text {
             font-size: 26px;
             font-weight: 800;
@@ -42,25 +72,96 @@
             align-items: center;
             gap: 8px;
         }
+
+        .settings-icon {
+            background: rgba(255, 255, 255, 0.15);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            color: white;
+            font-size: 22px;
+        }
+
+        .settings-icon:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.96);
+        }
+
+        /* ============================
+           ترويسة الصفحات الداخلية
+           ============================ */
+        .detail-header {
+            background: #0d6e48;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* ============================
+           الصفحة الرئيسية (الأطباء)
+           ============================ */
         .hero-section {
             background: #0d6e48;
             padding: 28px 20px 38px;
             text-align: center;
         }
+
         .hero-icon {
             width: 80px;
             height: 80px;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 14px;
         }
-        .hero-icon i { font-size: 40px; color: white; }
-        .hero-title { font-size: 30px; font-weight: 800; color: white; }
-        .hero-subtitle { font-size: 15px; color: rgba(255,255,255,0.9); margin-top: 6px; }
 
+        .hero-icon i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 6px;
+        }
+
+        /* أيقونات الاختصاصات السريعة */
         .quick-icons {
             display: flex;
             justify-content: space-around;
@@ -68,10 +169,15 @@
             margin: -24px 16px 0;
             border-radius: 32px;
             padding: 16px 8px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             gap: 6px;
         }
-        .quick-item { text-align: center; flex: 1; }
+
+        .quick-item {
+            text-align: center;
+            flex: 1;
+        }
+
         .quick-circle {
             width: 55px;
             height: 55px;
@@ -82,9 +188,19 @@
             justify-content: center;
             margin: 0 auto 8px;
         }
-        .quick-circle i { font-size: 26px; color: #0d6e48; }
-        .quick-label { font-size: 13px; font-weight: 700; color: #2a5a48; }
 
+        .quick-circle i {
+            font-size: 26px;
+            color: #0d6e48;
+        }
+
+        .quick-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2a5a48;
+        }
+
+        /* عنوان القسم والفلترة */
         .section-head {
             padding: 24px 18px 12px;
             display: flex;
@@ -93,11 +209,13 @@
             gap: 12px;
             flex-wrap: wrap;
         }
+
         .title-wrapper {
             display: flex;
             align-items: baseline;
             gap: 12px;
         }
+
         .section-head h2 {
             font-size: 22px;
             font-weight: 800;
@@ -105,6 +223,7 @@
             border-right: 4px solid #0d6e48;
             padding-right: 12px;
         }
+
         .badge-count {
             background: #eef7f2;
             color: #0d6e48;
@@ -113,6 +232,7 @@
             font-size: 14px;
             font-weight: 800;
         }
+
         .city-filter {
             background: white;
             border: 1.5px solid #e0eae4;
@@ -124,12 +244,9 @@
             color: #1e3a2e;
             cursor: pointer;
             outline: none;
-            transition: 0.2s;
-        }
-        .city-filter:focus {
-            border-color: #0d6e48;
         }
 
+        /* شريط أزرار الفلترة حسب الاختصاص */
         .filter-bar {
             padding: 10px 14px 12px;
             display: flex;
@@ -138,6 +255,7 @@
             scrollbar-width: thin;
             white-space: nowrap;
         }
+
         .filter-btn {
             padding: 10px 22px;
             background: #f0f3f0;
@@ -153,17 +271,20 @@
             gap: 8px;
             transition: 0.2s;
         }
+
         .filter-btn.active {
             background: #0d6e48;
             color: white;
         }
 
+        /* قائمة الأطباء */
         .doctors-list {
             padding: 10px 16px 28px;
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
+
         .doctor-card {
             background: white;
             border-radius: 32px;
@@ -175,9 +296,9 @@
             cursor: pointer;
             transition: all 0.2s;
             border: 1px solid #e6ede8;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
         }
-        .doctor-card:active { transform: scale(0.99); background: #fcfefd; }
+
         .doc-avatar {
             width: 130px;
             height: 130px;
@@ -186,13 +307,9 @@
             margin-bottom: 20px;
             background: #eef7f2;
             border: 4px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
-        .doc-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+
         .doc-initials {
             width: 100%;
             height: 100%;
@@ -204,12 +321,14 @@
             font-weight: 800;
             font-size: 48px;
         }
+
         .doc-name {
             font-size: 22px;
             font-weight: 800;
             color: #1e3a2e;
             margin-bottom: 10px;
         }
+
         .doc-spec {
             display: inline-flex;
             align-items: center;
@@ -222,6 +341,7 @@
             color: #0d6e48;
             margin-bottom: 24px;
         }
+
         .detail-btn {
             background: #0d6e48;
             color: white;
@@ -230,81 +350,174 @@
             border-radius: 60px;
             font-size: 18px;
             font-weight: 800;
-            font-family: 'Tajawal', sans-serif;
             cursor: pointer;
+            width: 100%;
+        }
+
+        /* ============================
+           صفحة معلومات التطبيق (الإعدادات)
+           ============================ */
+        .settings-container {
+            padding: 20px 20px 32px;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .about-icon-main {
+            background: #0d6e48;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            transition: 0.2s;
-            width: 100%;
-            margin-top: 8px;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
         }
-        .detail-btn:active { background: #0a5a3a; }
 
-        .detail-header {
-            background: #0d6e48;
-            padding: 16px 20px;
+        .about-icon-main i {
+            font-size: 44px;
+            color: white;
+        }
+
+        .about-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a3a2e;
+            margin-bottom: 6px;
+        }
+
+        .version-badge {
+            background: #eef7f2;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 60px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #0d6e48;
+        }
+
+        .about-section-card {
+            background: #f9fbfa;
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e9f0ec;
+            transition: 0.1s;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 19px;
+            font-weight: 800;
+            color: #0d6e48;
+            margin-bottom: 14px;
+            border-right: 4px solid #0d6e48;
+            padding-right: 14px;
+        }
+
+        .section-title i {
+            font-size: 22px;
+        }
+
+        .section-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #2c5a48;
+            padding-right: 8px;
+        }
+
+        .dev-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 16px 0 12px;
+        }
+
+        .dev-item {
+            background: white;
+            border-radius: 24px;
+            padding: 10px 16px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #e2ece6;
+        }
+
+        .dev-item i {
+            font-size: 22px;
+            color: #0d6e48;
+            width: 30px;
+        }
+
+        .dev-item span {
+            font-weight: 700;
+            font-size: 15px;
+            color: #1e3a2e;
+        }
+
+        .contact-info {
+            background: white;
+            border-radius: 24px;
+            padding: 12px 18px;
+            margin-top: 12px;
             display: flex;
             align-items: center;
             gap: 14px;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            border: 1px solid #e2ece6;
         }
-        .back-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            color: white;
+
+        .contact-info i {
             font-size: 20px;
-            cursor: pointer;
+            color: #0d6e48;
+            width: 28px;
         }
-        
+
+        .footer-note {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: #8aa296;
+            border-top: 1px solid #e6ede8;
+            padding-top: 20px;
+        }
+
+        /* ============================
+           صفحة تفاصيل الطبيب
+           ============================ */
         .gallery-container {
             background: white;
             padding: 16px 16px 0;
         }
+
         .main-image {
             width: 100%;
             height: 280px;
             border-radius: 24px;
             overflow: hidden;
             background: #f0f5f2;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
+
         .main-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .main-image-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #eef7f2, #d4e6de);
-            color: #0d6e48;
-            font-size: 48px;
-            gap: 12px;
-        }
-        .main-image-placeholder span {
-            font-size: 14px;
-            font-weight: 500;
-        }
+
         .thumbnail-gallery {
             display: flex;
             gap: 12px;
             padding: 16px 0;
             overflow-x: auto;
-            scrollbar-width: thin;
         }
+
         .thumbnail {
             width: 80px;
             height: 80px;
@@ -312,28 +525,19 @@
             overflow: hidden;
             cursor: pointer;
             border: 3px solid transparent;
-            transition: all 0.2s;
             background: #f0f3f0;
             flex-shrink: 0;
         }
+
         .thumbnail.active {
             border-color: #0d6e48;
             transform: scale(0.95);
         }
+
         .thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-        .thumbnail-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #e0eae4;
-            color: #0d6e48;
-            font-size: 24px;
         }
 
         .info-card {
@@ -341,9 +545,15 @@
             margin: 16px 18px;
             padding: 22px;
             border-radius: 32px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
         }
-        .detail-name { font-size: 24px; font-weight: 800; color: #1e3a2e; }
+
+        .detail-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1e3a2e;
+        }
+
         .detail-spec {
             display: inline-block;
             background: #eef7f2;
@@ -354,30 +564,35 @@
             font-weight: 700;
             margin: 10px 0 14px;
         }
-        .detail-bio { font-size: 14px; line-height: 1.6; color: #4c6b5c; margin-bottom: 18px; }
+
+        .detail-bio {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #4c6b5c;
+            margin-bottom: 18px;
+        }
+
         .schedule {
-            background: #fafdfb;
+            background: #eef7f2;
             border-radius: 24px;
             padding: 14px 16px;
             margin: 14px 0;
+            border-right: 4px solid #0d6e48;
+            color: #0e5a3c;
         }
-        .schedule h4 {
-            font-size: 16px;
-            font-weight: 800;
-            color: #1e5a43;
-            margin-bottom: 10px;
-            display: flex;
-            gap: 8px;
-        }
+
         .schedule-row {
             display: flex;
             justify-content: space-between;
             font-size: 14px;
             padding: 8px 0;
-            border-bottom: 1px solid #e2ece6;
+            border-bottom: 1px solid #eef7f2;
+            
+            
         }
+
         .location-text {
-            background: #fafdfb;
+            background: #eef7f2;
             border-radius: 24px;
             padding: 14px 16px;
             margin: 14px 0;
@@ -385,44 +600,37 @@
             align-items: center;
             gap: 12px;
             border-right: 4px solid #0d6e48;
-        }
-        .location-text i {
-            font-size: 20px;
             color: #0d6e48;
         }
-        .location-text .loc-detail {
-            font-size: 15px;
-            font-weight: 500;
-            color: #2c5a48;
-            line-height: 1.5;
-        }
+
         .price {
             background: #eef7f2;
             padding: 14px 18px;
             border-radius: 28px;
+            border-right: 4px solid #0d6e48;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 20;
             color: #0d6e48;
             margin-top: 12px;
         }
         .payment {
-            font-size: 13px;
-            color: #7c9a8a;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+            
+              font-size: 13px;
+              color: #7c9a8a;
+              margin-top: 10px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+                    }
         .map {
             margin: 8px 18px 18px;
             border-radius: 28px;
             overflow: hidden;
             height: 200px;
-            border: 1px solid #e2ece6;
         }
+
         .book-btn {
             width: calc(100% - 36px);
             margin: 0 18px 28px;
@@ -440,82 +648,56 @@
             cursor: pointer;
         }
 
+        /* ============================
+           مودال الحجز
+           ============================ */
+  
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.65);
+            background: rgba(0, 0, 0, 0.65);
             z-index: 1000;
             display: flex;
             align-items: flex-end;
             justify-content: center;
         }
-        .modal.hidden { display: none; }
+
+        .modal.hidden {
+            display: none;
+        }
+
         .modal-content {
             background: white;
             width: 100%;
             max-width: 500px;
             border-radius: 36px 36px 0 0;
             padding: 16px 0 28px;
-            animation: slideUp 0.25s ease;
         }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-        .modal-handle {
-            width: 50px;
-            height: 5px;
-            background: #d0dbd4;
-            border-radius: 5px;
-            margin: 0 auto 16px;
-        }
-        .modal-title { font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 4px; }
-        .wa-note {
-            background: #eef7f2;
-            margin: 12px 20px;
-            padding: 10px;
-            border-radius: 30px;
-            font-size: 13px;
-            text-align: center;
-            color: #0d6e48;
-        }
+
         .form-field {
             margin: 14px 20px;
         }
-        .form-field label {
-            font-size: 14px;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .form-field input, 
+
+        .form-field input,
         .form-field textarea {
             width: 100%;
             padding: 14px;
             border: 1.5px solid #e2ece6;
             border-radius: 28px;
             font-family: 'Tajawal', sans-serif;
-            font-size: 15px;
-            resize: vertical;
-            background: #fff;
         }
-        .form-field input:focus,
-        .form-field textarea:focus {
-            outline: none;
-            border-color: #0d6e48;
-        }
+
         .send-btn {
-            background: #25D366;
+            background: #2dbe62;
             width: calc(100% - 40px);
             margin: 16px 20px 8px;
             border: none;
             padding: 14px;
             border-radius: 60px;
             font-weight: 800;
-            font-size: 16px;
             color: white;
             display: flex;
             align-items: center;
@@ -523,21 +705,28 @@
             gap: 10px;
             cursor: pointer;
         }
+
         .cancel-btn {
             display: block;
             margin: 10px auto 18px;
             background: none;
             border: none;
             color: #8aa296;
-            font-size: 14px;
             cursor: pointer;
-            padding: 8px 20px;
-            border-radius: 40px;
-            transition: 0.2s;
-        }
-        .cancel-btn:active {
-            background: #f0f3f0;
-        }
+        }   
+                 .modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 4px;
+}
+            element.style {
+    text-align: center;
+    font-size: 14px;
+}
+        /* ============================
+           إشعار التوست
+           ============================ */
         .toast {
             position: fixed;
             bottom: 35px;
@@ -552,472 +741,692 @@
             opacity: 0;
             transition: 0.2s;
         }
-        .toast.show { opacity: 1; }
-        
-        /* مؤشر التحميل */
-        .loading-skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 16px;
-        }
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+
+        .toast.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div id="home-section">
-        <div class="header"><span class="logo-text">طبيبك</span></div>
-        <div class="hero-section">
-            <div class="hero-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-            <h1 class="hero-title">صحتك أمانتك</h1>
-            <p class="hero-subtitle">دليل الأطباء الموثوق</p>
-        </div>
-        <div class="quick-icons">
-            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-tooth"></i></div><span class="quick-label">أسنان</span></div>
-            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-hand-sparkles"></i></div><span class="quick-label">جلدية</span></div>
-            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-baby"></i></div><span class="quick-label">أطفال</span></div>
-            <div class="quick-item"><div class="quick-circle"><i class="fa-solid fa-eye"></i></div><span class="quick-label">عيون</span></div>
-        </div>
 
-        <div class="section-head">
-          <div class="title-wrapper">
-                <h2>أفضل أطباء</h2>
+    <!-- ==========================================
+         الحاوية الرئيسية للتطبيق
+         ========================================== -->
+    <div class="app-container">
+
+        <!-- ==================== الصفحة الرئيسية (قائمة الأطباء) ==================== -->
+        <div id="home-section">
+
+            <!-- الهيدر -->
+            <div class="header">
+                <button class="settings-icon" onclick="openSettingsPage()">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <span class="logo-text">طبيبك</span>
+                <div style="width:44px;"></div> <!-- عنصر وهمي للمحاذاة -->
             </div>
-            <select id="cityFilterSelect" class="city-filter">
-                <option value="الطبقة"> الطبقة</option>
-                <option value="الرقة"> الرقة</option>
-                <option value="دمشق"> دمشق</option>
-            </select>
-            <span class="badge-count" id="doctorCount">0</span>
-        </div>
 
-        <div class="filter-bar" id="filterContainer"></div>
-        <div class="doctors-list" id="doctorsGrid">
-            <div style="text-align:center; padding:50px;">
-                <i class="fa-solid fa-spinner fa-pulse"></i> جاري التحميل...
+            <!-- القسم الترحيبي -->
+            <div class="hero-section">
+                <div class="hero-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h1 class="hero-title">صحتك أمانتك</h1>
+                <p class="hero-subtitle">دليل الأطباء الموثوق</p>
             </div>
-        </div>
-    </div>
 
-    <div id="doctor-section">
-        <div class="detail-header">
-            <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-right"></i></button>
-            <span id="detailDoctorName"></span>
-        </div>
-        
-        <div class="gallery-container">
-            <div class="main-image" id="mainImage">
-                <div class="main-image-placeholder">
-                    <i class="fa-solid fa-image"></i>
-                    <span>تحميل الصورة...</span>
+            <!-- أيقونات الاختصاصات السريعة -->
+            <div class="quick-icons">
+                <div class="quick-item">
+                    <div class="quick-circle"><i class="fa-solid fa-tooth"></i></div>
+                    <span class="quick-label">أسنان</span>
+                </div>
+                <div class="quick-item">
+                    <div class="quick-circle"><i class="fa-solid fa-hand-sparkles"></i></div>
+                    <span class="quick-label">جلدية</span>
+                </div>
+                <div class="quick-item">
+                    <div class="quick-circle"><i class="fa-solid fa-baby"></i></div>
+                    <span class="quick-label">أطفال</span>
+                </div>
+                <div class="quick-item">
+                    <div class="quick-circle"><i class="fa-solid fa-eye"></i></div>
+                    <span class="quick-label">عيون</span>
                 </div>
             </div>
-            <div class="thumbnail-gallery" id="thumbnailGallery"></div>
-        </div>
-        
-        <div class="info-card">
-            <div class="detail-name" id="detailName"></div>
-            <span class="detail-spec" id="detailSpecialty"></span>
-            <p class="detail-bio" id="detailBio"></p>
-            <div class="schedule">
-                <h4><i class="fa-regular fa-clock"></i> ساعات العمل</h4>
-                <div id="scheduleContent"></div>
-            </div>
-            <div class="location-text" id="detailLocationBlock">
-                <i class="fa-solid fa-location-dot"></i>
-                <div class="loc-detail" id="detailLocationText">---</div>
-            </div>
-            <div class="price"><i class="fa-solid fa-money-bill-wave"></i> الكشف: <strong id="detailPrice"></strong></div>
-            <div class="payment"><i class="fa-solid fa-wallet"></i> الدفع: شام كاش / نقدي</div>
-        </div>
-        <div class="map">
-            <iframe id="detailMap" width="100%" height="200" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-        <button class="book-btn" onclick="openBookingModal()"><i class="fa-regular fa-calendar-check"></i> احجز موعداً</button>
-    </div>
-</div>
 
-<div class="modal hidden" id="bookingModal">
-    <div class="modal-content">
-        <div class="modal-handle"></div>
-        <div class="modal-title">تأكيد الحجز</div>
-        <p style="text-align:center; font-size:14px;" id="modalDoctorName"></p>
-        <div class="wa-note"><i class="fa-brands fa-whatsapp"></i> سيتم إرسال طلبك عبر واتساب</div>
-        <form id="bookingForm">
-            <div class="form-field"><label>الاسم الكامل</label><input type="text" id="patientName" required></div>
-            <div class="form-field"><label>العمر</label><input type="number" id="patientAge" required></div>
-            <div class="form-field"><label>رقم الهاتف</label><input type="tel" id="patientPhone" required></div>
-            <div class="form-field">
-                <label><i class="fa-regular fa-note-sticky"></i> المكان القادم منه </label>
-                <textarea id="visitReason" rows="2" placeholder="مثال: السويدية، المنصورة، البوعاصي..." required></textarea>
+            <!-- عنوان القسم مع الفلترة -->
+            <div class="section-head">
+                <div class="title-wrapper">
+                    <h2>أفضل أطباء</h2>
+                </div>
+                <select id="cityFilterSelect" class="city-filter">
+                    <option value="الطبقة">الطبقة</option>
+                    <option value="الرقة">الرقة</option>
+                </select>
+                <span class="badge-count" id="doctorCount">0</span>
             </div>
-            <button type="submit" class="send-btn"><i class="fa-brands fa-whatsapp"></i> إرسال الطلب</button>
-        </form>
-        <button type="button" class="cancel-btn" onclick="closeBookingModal()">إلغاء</button>
-    </div>
-</div>
-<div id="toast" class="toast"></div>
 
-<script>
-    // تحسين: استخدام صور مصغرة أصغر حجماً للتحميل السريع
-    const doctors = [
-        { 
-            id:1, name:'د. عبدالرحمن الشيخ', specialty:'أسنان', city:'الطبقة',
-            locationText:'شارع الثورة، عمارة النور، الطابق الثالث، قرب دوار البلد - الطبقة',
-            photo:'https://raw.githubusercontent.com/2001abdalrahman2001-pixel/doctor/ad77f92ffa9909a07f615388f21a863b1832e70e/IMG_20220524_110115_112.jpg',
-            gallery: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop'
-            ],
-            galleryThumbs: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop'
-            ],
-            galleryLabels: ['غرفة الانتظار', 'غرفة المعاينة', 'الأجهزة الطبية'],
-            galleryIcons: ['fa-couch', 'fa-stethoscope', 'fa-microscope'],
-            bio:'خبرة 12 عاماً في تجميل وزراعة الأسنان، تقنيات حديثة.', 
-            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
-            price:'15,000 ل.س', whatsapp:'963934175735', initials:'أ.خ',
-            schedule: { 'السبت - الخميس':'9ص - 5م', 'الجمعة':'مغلق' } 
-        },
-        { 
-            id:2, name:'د. منار الحسن', specialty:'جلدية', city:'الرقة',
-            locationText:'شارع القوتلي، بناء الهلال، مجمع الشفاء الطبي - الرقة',
-            photo:'',
-            gallery: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop'
-            ],
-            galleryThumbs: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop'
-            ],
-            galleryLabels: ['غرفة الانتظار', 'عيادة الجلدية', 'غرفة الليزر'],
-            galleryIcons: ['fa-couch', 'fa-hand-sparkles', 'fa-sun'],
-            bio:'اختصاصية جلدية وتجميل بالليزر، عضوة الجمعية السورية.', 
-            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',  
-            price:'20,000 ل.س', whatsapp:'963934175735', initials:'م.ح',
-            schedule: { 'السبت - الأربعاء':'10ص - 6م', 'الخميس':'10ص - 2م', 'الجمعة':'مغلق' } 
-        },
-        { 
-            id:3, name:'د. رامي العلي', specialty:'أطفال', city:'الطبقة',
-            locationText:'حي المفتي، قرب مستشفى الطبقة الوطني - عمارة الأمل، طابق أول',
-            photo:'',
-            gallery: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop'
-            ],
-            galleryThumbs: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=100&h=100&fit=crop'
-            ],
-            galleryLabels: ['غرفة اللعب', 'عيادة الأطفال', 'غرفة التطعيم'],
-            galleryIcons: ['fa-child', 'fa-stethoscope', 'fa-syringe'],
-            bio:'أستاذ طب الأطفال، خبرة 15 عاماً في اللقاحات والنمو.', 
-            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
-            price:'12,000 ل.س', whatsapp:'963934175735', initials:'ر.ع',
-            schedule: { 'الأحد - الخميس':'8ص - 4م', 'السبت':'9ص - 1م', 'الجمعة':'مغلق' } 
-        },
-        { 
-            id:4, name:'د. سلمى ناصر', specialty:'نسائية', city:'الرقة',
-            locationText:'شارع النعيم، بناية الفردوس، عيادات الدكتورة سلمى - الرقة',
-            photo:'',
-            gallery: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop'
-            ],
-            galleryThumbs: [
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop'
-            ],
-            galleryLabels: ['غرفة الانتظار', 'غرفة الكشف', 'وحدة الولادة'],
-            galleryIcons: ['fa-couch', 'fa-female', 'fa-baby-carriage'],
-            bio:'اختصاصية نسائية وتوليد، رعاية الحوامل والولادة الطبيعية.', 
-            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
-            price:'18,000 ل.س', whatsapp:'963934175735', initials:'س.ن',
-            schedule: { 'السبت - الثلاثاء':'10ص - 5م', 'الأربعاء':'10ص - 3م', 'الخميس والجمعة':'مغلق' } 
-        },
-        { 
-            id:5, name:'د. ياسر الخطيب', specialty:'عيون', city:'الطبقة',
-            locationText:'شارع ميسلون، مجمع النور الطبي، الدور الثالث، دمشق',
-            photo:'',
-            gallery: [
-                'https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop'
-            ],
-            galleryThumbs: [
-                'https://images.unsplash.com/photo-1581595229592-0f2d2e0e1e8b?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop'
-            ],
-            galleryLabels: ['غرفة الفحص', 'غرفة العمليات', 'جهاز الليزك'],
-            galleryIcons: ['fa-eye', 'fa-scalpel', 'fa-laser'],
-            bio:'جراح عيون، عمليات الليزك والمياه البيضاء.',
-            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
-            price:'25,000 ل.س', whatsapp:'963934175735', initials:'ي.خ',
-            schedule: { 'السبت - الخميس':'9ص - 7م', 'الجمعة':'مغلق' } 
-        },
-        { 
-            id:6, name:'د. لينا عثمان', specialty:'عامة', city:'الطبقة',
-            locationText:'شارع السوق المركزي، بناية الصحة، طابق أرضي - الطبقة',
-            photo:'',
-            gallery: [
-                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop'
-            ],
-            galleryThumbs: [
-                'https://images.unsplash.com/photo-1551076805-e1869033e561?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
-                'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop'
-            ],
-            galleryLabels: ['غرفة الاستقبال', 'عيادة الباطنية', 'غرفة الفحوصات'],
-            galleryIcons: ['fa-user-md', 'fa-stethoscope', 'fa-flask'],
-            bio:'طب أسرة، استشارات ورعاية صحية شاملة.', 
-            mapEmbedUrl:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s', 
-            price:'10,000 ل.س', whatsapp:'963934175735', initials:'ل.ع',
-            schedule: { 'الأحد - الخميس':'8:30ص - 3م', 'السبت':'9ص - 12ظ', 'الجمعة':'مغلق' } 
+            <!-- شريط أزرار الفلترة حسب الاختصاص -->
+            <div class="filter-bar" id="filterContainer"></div>
+
+            <!-- قائمة الأطباء -->
+            <div class="doctors-list" id="doctorsGrid">
+                <div style="text-align:center; padding:50px;">
+                    <i class="fa-solid fa-spinner fa-pulse"></i> جاري التحميل...
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== صفحة تفاصيل الطبيب ==================== -->
+        <div id="doctor-section">
+            <div class="detail-header">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <span id="detailDoctorName"></span>
+            </div>
+
+            <!-- معرض الصور -->
+            <div class="gallery-container">
+                <div class="main-image" id="mainImage">
+                    <div class="main-image-placeholder" style="display:flex; align-items:center; justify-content:center; height:100%; background:#eef7f2;">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                </div>
+                <div class="thumbnail-gallery" id="thumbnailGallery"></div>
+            </div>
+
+            <!-- بطاقة المعلومات -->
+            <div class="info-card">
+                <div class="detail-name" id="detailName"></div>
+                <span class="detail-spec" id="detailSpecialty"></span>
+                <p class="detail-bio" id="detailBio"></p>
+
+                <!-- ساعات العمل -->
+                <div class="schedule">
+                    <h4><i class="fa-regular fa-clock"></i> ساعات العمل</h4>
+                    <div id="scheduleContent"></div>
+                </div>
+
+                <!-- الموقع -->
+                <div class="location-text">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div class="loc-detail" id="detailLocationText"></div>
+                </div>
+
+                <!-- السعر -->
+                <div class="price">
+                    <i class="fa-solid fa-money-bill-wave"></i> الكشف: <strong id="detailPrice"></strong>
+                </div>
+                <div class="payment"><i class="fa-solid fa-wallet"></i> الدفع: شام كاش / نقدي</div>
+            </div>
+
+            <!-- خريطة الموقع -->
+            <div class="map">
+                <iframe id="detailMap" width="100%" height="200" frameborder="0" style="border:0;" allowfullscreen loading="lazy"></iframe>
+            </div>
+
+            <!-- زر الحجز -->
+            <button class="book-btn" onclick="openBookingModal()">
+                <i class="fa-regular fa-calendar-check"></i> احجز موعداً
+            </button>
+        </div>
+
+        <!-- ==================== صفحة الإعدادات / معلومات التطبيق ==================== -->
+        <div id="settings-section">
+            <div class="detail-header">
+                <button class="back-btn" onclick="closeSettingsPage()">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <span style="font-weight:800; font-size:20px;">الإعدادات والمعلومات</span>
+            </div>
+
+            <div class="settings-container">
+                <!-- ترويسة الصفحة -->
+                <div class="about-header">
+                    <div class="about-icon-main"><i class="fa-solid fa-stethoscope"></i></div>
+                    <h2>حول طبيبك</h2>
+                </div>
+
+                <!-- قسم الرؤية -->
+                <div class="about-section-card">
+                    <div class="section-title">
+                        <i class="fa-solid fa-eye"></i><span>رؤيتنا</span>
+                    </div>
+                    <div class="section-text">
+                        منصة "طبيبك" هي دليل يهدف إلى تسهيل التواصل مع أفضل الأطباء في مختلف المناطق. نقدم معلومات دقيقة عن المواعيد، الاختصاصات، والعناوين مع خدمة حجز مباشرة عبر واتساب.
+                    </div>
+                </div>
+
+                <!-- قسم المواقع المغطاة -->
+                <div class="about-section-card">
+                    <div class="section-title">
+                        <i class="fa-solid fa-location-dot"></i><span>المواقع التي نغطيها</span>
+                    </div>
+                    <div class="section-text">
+                        حالياً التطبيق يغطي مدينة <strong>الطبقة</strong> مع خطط توسعية لتشمل جميع المحافظات. جميع الأطباء مسجلون بعناوين معتمدة وسياقات محدثة.
+                    </div>
+                </div>
+
+                <!-- قسم المطور -->
+                <div class="about-section-card">
+                    <div class="section-title">
+                        <i class="fa-solid fa-code"></i><span>المبرمج والمطور</span>
+                    </div>
+                    <div class="section-text">
+                        تم التطوير بواسطة أيادي سورية متخصصة في تقنية المعلومات.
+                    </div>
+                    <div class="dev-info">
+                        <div class="dev-item">
+                            <i class="fa-solid fa-user-astronaut"></i><span>عبدالرحمن الشيخ</span>
+                        </div>
+                        <div class="dev-item">
+                            <i class="fa-solid fa-laptop-code"></i><span>مطور رئيسي</span>
+                        </div>
+                    </div>
+                    <div class="contact-info" style="margin-top: 8px;">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <span>للتواصل والاستفسارات 963934175735+</span>
+                    </div>
+                </div>
+
+                <!-- قسم الخصوصية -->
+                <div class="about-section-card">
+                    <div class="section-title">
+                        <i class="fa-solid fa-shield-heart"></i><span>الخصوصية والأمان</span>
+                    </div>
+                    <div class="section-text">
+                        جميع الحجوزات تتم عبر التواصل المباشر مع الطبيب، لا نحتفظ بأي بيانات شخصية على خوادمنا. نضمن لك تجربة آمنة وخصوصية كاملة.
+                    </div>
+                </div>
+
+                <!-- تذييل الصفحة -->
+                <div class="footer-note">
+                    <i class="fa-regular fa-copyright"></i> طبيبك 2026 – جميع الحقوق محفوظة
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== مودال الحجز ==================== -->
+    <div class="modal hidden" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-handle" style="width:50px;height:5px;background:#d0dbd4;margin:0 auto 16px;"></div>
+            <div class="modal-title">تأكيد الحجز</div>
+            <p style="text-align:center; font-size:14px;" id="modalDoctorName"></p>
+            <div class="wa-note" style="background:#eef7f2;margin:12px20px;padding:10px;border-radius:30px;">
+                <i class="fa-brands fa-whatsapp"></i> سيتم إرسال طلبك عبر واتساب
+            </div>
+
+            <form id="bookingForm">
+                <div class="form-field">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="patientName" required>
+                </div>
+                <div class="form-field">
+                    <label>العمر</label>
+                    <input type="number" id="patientAge" required>
+                </div>
+                <div class="form-field">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" id="patientPhone" required>
+                </div>
+                <div class="form-field">
+                    <label>المكان القادم منه</label>
+                    <textarea id="visitReason" rows="2" placeholder="مثال: السويدية، المنصورة..." required></textarea>
+                </div>
+                <button type="submit" class="send-btn">
+                    <i class="fa-brands fa-whatsapp"></i> إرسال الطلب
+                </button>
+            </form>
+            <button type="button" class="cancel-btn" onclick="closeBookingModal()">إلغاء</button> 
+         </div>
+    </div>
+
+    <!-- ==================== إشعار التوست ==================== -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ==================== كود JavaScript ==================== -->
+    <script>
+        // ============================
+        // بيانات الأطباء
+        // ============================
+        const doctors = [
+            // ---- عبارة الصبح ----
+            {
+                id: 1,
+                name: 'د. محمد عبود الحسين',
+                specialty: 'عيون',
+                city: 'الطبقة',
+                locationText: ' الطبقة  - الشارع الرئيسي - جانب فروج البكور - بناية الصبح  ',
+                photo: 'dr.mohamd_abod_alhesen/photo_1.jpg',
+                gallery: [
+                    'dr.mohamd_abod_alhesen/photo_2.jpg',
+                ],
+                galleryThumbs: [
+                    'dr.mohamd_abod_alhesen/photo_2.jpg',
+                ],
+                galleryLabels: ['غرفة 2', 'غرفة 1', 'غرفة 3'],
+                galleryIcons: ['fa-couch', 'fa-stethoscope', 'fa-microscope'],
+                bio: 'جراحة الساد (الماء الأبيض ) بتقنية الفاكو بدون قطب - حول - زرق (الماء الأسود ) - شبكية - قرنية أجفان',
+                mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',
+                price: '75000 ل.س',
+                whatsapp: '963982178746',
+                initials: 'م.ع',
+                schedule: {
+                    'السبت - الخميس': '9ص - 5م',
+                    'الجمعة': 'مغلق'
+                }
+            },
+            {
+                id: 2,
+                name: 'د. أحمد غسان براهيم',
+                specialty: 'قلبية',
+                city: 'الطبقة',
+                locationText: ' الطبقة  - الشارع الرئيسي - جانب فروج البكور - بناية الصبح  ',
+                photo: '',
+                gallery: [
+                   
+                ],
+                galleryThumbs: [
+                    
+                ],
+                galleryLabels: ['غرفة 2', 'غرفة 1', 'غرفة 3'],
+                galleryIcons: ['fa-couch', 'fa-hand-sparkles', 'fa-sun'],
+                bio: 'أختصاص بأمراض القلب و القثطرة القلبية , حائز على شهادة البورد السوري بالأمراض القلبية وتداخلاتها نقدم تخطيط قلب كهربائي - ايكو قلب - اختبار جهد قثطرة قلبية مع شبكات دوائية - بطاريات قلبية - تنظيم ضغظ وسكري.',
+                mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',
+                price: '20,000 ل.س',
+                whatsapp: '9639341533116',
+                initials: 'أ.غ',
+                schedule: {
+                    'السبت - الخميس': '10ص - 6م',
+                    'الجمعة': 'مغلق'
+                }
+            },
+            {
+                id: 3,
+                name: 'د. خالد مرعي حديد',
+                specialty: 'عظمية',
+                city: 'الطبقة',
+                locationText: ' الطبقة  - الشارع الرئيسي - جانب فروج البكور - بناية الصبح  ',
+                photo: 'dr.haled_mary_haded/photo_1.jpg',
+                gallery: [
+                    'dr.haled_mary_haded/photo_2.jpg',
+                    'dr.haled_mary_haded/photo_3.jpg',
+                    
+                ],
+                galleryThumbs: [
+                    'dr.haled_mary_haded/photo_2.jpg',
+                    'dr.haled_mary_haded/dr_ala_alsakran\photo_1.jpgphoto_3.jpg',
+                ],
+                galleryLabels: ['غرفة 2', 'غرفة 1', 'غرفة 3'],
+                galleryIcons: ['fa-child', 'fa-stethoscope', 'fa-syringe'],
+                bio: 'أختصاص جراحة عظمية - اختصاصي تنظير مفاصل الركبة - جراحة جسور - مفاصل -تشوهات أطفال - خلع ولادة - ديسك - إالتهاب مفاصل',
+                mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',
+                price: 'حسب العمل',
+                whatsapp: '963997488521',
+                initials: 'خ.م',
+                schedule: {
+                    'السبت - الخميس': '8ص - 4م',
+                    'الجمعة': 'مغلق'
+                }
+            },
+            {
+                id: 4,
+                name: 'د. حسن علي الحامد',
+                specialty: 'أسنان',
+                city: 'الطبقة',
+                locationText: ' الطبقة  - الشارع الرئيسي - جانب فروج البكور - بناية الصبح  ',
+                photo: 'dr.hasan_alhamd/photo_3.jpg',
+                gallery: [
+                    'dr.hasan_alhamd/photo_2.jpg',
+                    'dr.hasan_alhamd/photo_1.jpg',
+                   
+                ],
+                galleryThumbs: [
+                    'dr.hasan_alhamd/photo_2.jpg',
+                    'dr.hasan_alhamd/photo_1.jpg',
+                ],
+                galleryLabels: ['غرفة 2', 'غرفة 1', 'غرفة 3'],
+                galleryIcons: ['fa-couch', 'fa-female', 'fa-baby-carriage'],
+                bio: 'أخصائي في طب الأسنان و جراحتها .',
+                mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',
+                price: 'حسب العمل',
+                whatsapp: '963936655476',
+                initials: 'ح.ع',
+                schedule: {
+                    'السبت - الخميس': '10ص - 5م',
+                    'الجمعة': 'مغلق'
+                }
+            },
+            // ---- عبارة الفداوي ----
+            {
+                id: 5,
+                name: 'د. محمد ضياء عيد المحمد',
+                specialty: 'أسنان',
+                city: 'الطبقة',
+                locationText: ' الطبقة  - الشارع الرئيسي - عبارة الفداوي - طابق ثاني  ',
+                photo: '',
+                gallery: [
+                    'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+                    'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
+                    'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop'
+                ],
+                galleryThumbs: [
+                    'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
+                    'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
+                    'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop'
+                ],
+                galleryLabels: ['غرفة 2', 'غرفة 1', 'غرفة 3'],
+                galleryIcons: ['fa-couch', 'fa-female', 'fa-baby-carriage'],
+                bio: 'أخصائي في طب الأسنان و جراحتها .',
+                mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',
+                price: 'حسب العمل',
+                whatsapp: '963949804907',
+                initials: 'م.ض',
+                schedule: {
+                    'السبت - الخميس': '10ص - 5م',
+                    'الجمعة': 'مغلق'
+                }
+            },
+            {
+                id: 6,
+                name: 'د. محمد حسن العلي ',
+                specialty: 'أسنان',
+                city: 'الطبقة',
+                locationText: ' الطبقة  - الشارع الرئيسي - عبارة الفداوي - طابق ثاني  ',
+                photo: '',
+                gallery: [
+                    'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+                    'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
+                    'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&h=300&fit=crop'
+                ],
+                galleryThumbs: [
+                    'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=100&h=100&fit=crop',
+                    'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
+                    'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=100&h=100&fit=crop'
+                ],
+                galleryLabels: ['غرفة 2', 'غرفة 1', 'غرفة 3'],
+                galleryIcons: ['fa-couch', 'fa-female', 'fa-baby-carriage'],
+                bio: 'أخصائي في طب الفم و الأسنان و جراحة اللثة ,  تيجان و جسور - خزف - زيركون - حشوات تجميلية - تبييض أسنان.',
+                mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',
+                price: 'حسب العمل',
+                whatsapp: '963996844215',
+                initials: 'م.ض',
+                schedule: {
+                    'السبت - الخميس': '10ص - 5م',
+                    'الجمعة': 'مغلق'
+                }
+            },
+            {
+                id: 7,
+                name: 'د. آلاء أحمد السكران ',
+                specialty: 'أسنان',
+                city: 'الطبقة',
+                locationText: ' الطبقة  - الشارع الرئيسي - عبارة الفداوي - طابق ثاني  ',
+                photo: 'dr_ala_alsakran/photo_1.jpg',
+                gallery: [
+                    'dr_ala_alsakran/photo_2.jpg',
+                    'dr_ala_alsakran/photo_3.jpg',
+                    
+                ],
+                galleryThumbs: [
+                    'dr_ala_alsakran/photo_2.jpg',
+                    'dr_ala_alsakran/photo_3.jpg',
+                ],
+                galleryLabels: ['غرفة 2', 'غرفة 1', 'غرفة 3'],
+                galleryIcons: ['fa-couch', 'fa-female', 'fa-baby-carriage'],
+                bio: 'أخصائي في طب الفم و الأسنان و جراحة اللثة ,  تيجان و جسور - خزف - زيركون - حشوات تجميلية - تبييض أسنان أبتسامة هوليود.',
+                mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d21760.457070644676!2d38.54908824460875!3d35.83155191291365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1530b19093ac7b4d%3A0x831baeb3e4487ba5!2z2KfZhNi32KjZgtip2Iwg2LPZiNix2YrYpw!5e0!3m2!1sar!2s!4v1777373947398!5m2!1sar!2s',
+                price: 'حسب العمل',
+                whatsapp: '963998932168',
+                initials: 'ا.ح',
+                schedule: {
+                    'السبت - الخميس': '10ص - 5م',
+                    'الجمعة': 'مغلق'
+                }
+            }
+        ];
+
+        // ============================
+        // المتغيرات العامة
+        // ============================
+        let currentSpecialtyFilter = 'all';
+        let currentCityFilter = 'الطبقة';
+        let currentDoctor = null;
+        let currentImageIndex = 0;
+
+        // ============================
+        // دوال التنقل بين الصفحات
+        // ============================
+        function openSettingsPage() {
+            document.getElementById('home-section').style.display = 'none';
+            document.getElementById('doctor-section').style.display = 'none';
+            document.getElementById('settings-section').style.display = 'block';
         }
-    ];
 
-    let currentSpecialtyFilter = 'all';
-    let currentCityFilter = 'الطبقة';
-    let currentDoctor = null;
-    let currentImageIndex = 0;
+        function closeSettingsPage() {
+            document.getElementById('settings-section').style.display = 'none';
+            document.getElementById('home-section').style.display = 'block';
+        }
 
-    // دوال معرض الصور المحسنة
-    function displayMainImage(index, doctor) {
-        const mainContainer = document.getElementById('mainImage');
-        if (!doctor || !doctor.gallery || !doctor.gallery[index]) return;
-        
-        const imageUrl = doctor.gallery[index];
-        const label = doctor.galleryLabels[index] || 'صورة العيادة';
-        const icon = doctor.galleryIcons[index] || 'fa-image';
-        
-        // استخدام lazy loading للصورة الرئيسية
-        mainContainer.innerHTML = `
-            <img src="${imageUrl}" alt="${label}" loading="lazy" decoding="async" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'main-image-placeholder\'><i class=\'fa-solid ${icon}\'></i><span>${label}</span></div>';">
-        `;
-        
-        document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-            thumb.classList.toggle('active', i === index);
-        });
-    }
-    
-    function buildThumbnails(doctor) {
-        const galleryContainer = document.getElementById('thumbnailGallery');
-        if (!doctor || !doctor.gallery) return;
-        
-        // استخدام الصور المصغرة المحسنة
-        const thumbs = doctor.galleryThumbs || doctor.gallery;
-        
-        galleryContainer.innerHTML = doctor.gallery.map((_, idx) => {
-            const thumbUrl = thumbs[idx];
-            const label = doctor.galleryLabels[idx] || 'صورة';
-            const icon = doctor.galleryIcons[idx] || 'fa-image';
-            return `
-                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="switchImage(${idx})">
-                    <img src="${thumbUrl}" alt="${label}" loading="lazy" decoding="async" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'thumbnail-placeholder\'><i class=\'fa-solid ${icon}\'></i></div>';">
-                </div>
-            `;
-        }).join('');
-    }
-    
-    function switchImage(index) {
-        if (!currentDoctor) return;
-        currentImageIndex = index;
-        displayMainImage(index, currentDoctor);
-    }
+        function goBack() {
+            document.getElementById('doctor-section').style.display = 'none';
+            document.getElementById('home-section').style.display = 'block';
+            document.getElementById('detailMap').src = '';
+            currentDoctor = null;
+        }
 
-    function buildFilters() {
-        const container = document.getElementById('filterContainer');
-        const specialties = [...new Set(doctors.map(d => d.specialty))];
-        specialties.sort();
-        let html = `<button class="filter-btn active" data-filter="all"><i class="fa-solid fa-list"></i> الكل</button>`;
-        const icons = { 'أسنان':'fa-tooth', 'جلدية':'fa-hand-sparkles', 'أطفال':'fa-child', 'نسائية':'fa-female', 'عيون':'fa-eye', 'عامة':'fa-user-doctor' };
-        specialties.forEach(s => {
-            let icon = icons[s] || 'fa-stethoscope';
-            html += `<button class="filter-btn" data-filter="${s}"><i class="fa-solid ${icon}"></i> ${s}</button>`;
-        });
-        container.innerHTML = html;
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentSpecialtyFilter = btn.dataset.filter;
+        // ============================
+        // دوال الفلترة وعرض الأطباء
+        // ============================
+        function buildFilters() {
+            const container = document.getElementById('filterContainer');
+            const specialties = [...new Set(doctors.map(d => d.specialty))];
+
+            let html = `<button class="filter-btn active" data-filter="all"><i class="fa-solid fa-list"></i> الكل</button>`;
+            specialties.forEach(s => {
+                html +=
+                    `<button class="filter-btn" data-filter="${s}"><strong style="font-size: 18px;">${s}</strong> </button>`;
+            });
+            container.innerHTML = html;
+
+            // إضافة أحداث النقر على أزرار الفلترة
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove(
+                        'active'));
+                    btn.classList.add('active');
+                    currentSpecialtyFilter = btn.dataset.filter;
+                    renderDoctors();
+                });
+            });
+        }
+
+        function initCityFilter() {
+            document.getElementById('cityFilterSelect').addEventListener('change', (e) => {
+                currentCityFilter = e.target.value;
                 renderDoctors();
             });
-        });
-    }
-
-    function initCityFilter() {
-        const citySelect = document.getElementById('cityFilterSelect');
-        citySelect.addEventListener('change', (e) => {
-            currentCityFilter = e.target.value;
-            renderDoctors();
-        });
-        citySelect.value = currentCityFilter;
-    }
-
-    function getFilteredDoctors() {
-        let filtered = doctors;
-        if (currentSpecialtyFilter !== 'all') {
-            filtered = filtered.filter(d => d.specialty === currentSpecialtyFilter);
+            document.getElementById('cityFilterSelect').value = currentCityFilter;
         }
-        filtered = filtered.filter(d => d.city === currentCityFilter);
-        return filtered;
+
+        function getFilteredDoctors() {
+            let filtered = doctors.filter(d => d.city === currentCityFilter);
+            if (currentSpecialtyFilter !== 'all') {
+                filtered = filtered.filter(d => d.specialty === currentSpecialtyFilter);
+            }
+            return filtered;
+        }
+
+       function renderDoctors() {
+    const grid = document.getElementById('doctorsGrid');
+    const filtered = getFilteredDoctors();
+    document.getElementById('doctorCount').innerText = filtered.length;
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div style="text-align:center; padding:50px;">لا يوجد أطباء</div>';
+        return;
     }
 
-    function renderDoctors() {
-        const grid = document.getElementById('doctorsGrid');
-        const filtered = getFilteredDoctors();
-        document.getElementById('doctorCount').innerText = filtered.length;
-        
-        if(filtered.length === 0) {
-            grid.innerHTML = `<div style="text-align:center; padding:50px; color:#8aa296;">لا يوجد أطباء في هذه المدينة مع التخصص المختار</div>`;
-            return;
+    grid.innerHTML = filtered.map(doc => `
+        <div class="doctor-card" onclick="openDetail(${doc.id})">
+            <div class="doc-avatar">
+                ${doc.photo && doc.photo !== '' ? 
+                    `<img src="${doc.photo}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" 
+                         onerror="this.parentElement.innerHTML='<div class=\'doc-initials\'>${doc.initials}</div>';">` 
+                    : 
+                    `<div class="doc-initials">${doc.initials}</div>`
+                }
+            </div>
+            <div class="doc-name">${doc.name}</div>
+            <div class="doc-spec"><i class="fa-solid fa-stethoscope"></i> ${doc.specialty}</div>
+            <button class="detail-btn" onclick="event.stopPropagation(); openDetail(${doc.id});">
+                <i class="fa-regular fa-eye"></i> تفاصيل
+            </button>
+        </div>
+    `).join('');
+}
+
+        // ============================
+        // دوال صفحة تفاصيل الطبيب
+        // ============================
+        function openDetail(id) {
+            const doc = doctors.find(d => d.id === id);
+            if (!doc) return;
+
+            currentDoctor = doc;
+            currentImageIndex = 0;
+
+            // تعبئة المعلومات
+            document.getElementById('detailDoctorName').innerText = doc.name;
+            document.getElementById('detailName').innerText = doc.name;
+            document.getElementById('detailSpecialty').innerText = doc.specialty;
+            document.getElementById('detailBio').innerText = doc.bio;
+            document.getElementById('detailPrice').innerText = doc.price;
+            document.getElementById('detailMap').src = doc.mapEmbedUrl;
+            document.getElementById('modalDoctorName').innerHTML = `حجز مع ${doc.name}`;
+
+            // ساعات العمل
+            const scheduleDiv = document.getElementById('scheduleContent');
+            scheduleDiv.innerHTML = Object.entries(doc.schedule)
+                .map(([day, hours]) => `<div class="schedule-row"><span>${day}</span><span>${hours}</span></div>`)
+                .join('');
+
+            // الموقع
+            document.getElementById('detailLocationText').innerText = doc.locationText;
+
+            // بناء معرض الصور
+            buildThumbnails(doc);
+            displayMainImage(0, doc);
+
+            // الانتقال إلى صفحة الطبيب
+            document.getElementById('home-section').style.display = 'none';
+            document.getElementById('doctor-section').style.display = 'block';
+            window.scrollTo(0, 0);
         }
-        
-        // تحسين الأداء: استخدام DocumentFragment
-        const fragment = document.createDocumentFragment();
-        const iconsMap = { 'أسنان':'fa-tooth', 'جلدية':'fa-hand-sparkles', 'أطفال':'fa-child', 'نسائية':'fa-female', 'عيون':'fa-eye', 'عامة':'fa-user-doctor' };
-        
-        filtered.forEach(doc => {
-            let icon = iconsMap[doc.specialty] || 'fa-stethoscope';
-            const card = document.createElement('div');
-            card.className = 'doctor-card';
-            card.onclick = () => openDetail(doc.id);
-            card.innerHTML = `
-                <div class="doc-avatar">
-                    <img src="${doc.photo}" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.querySelector('.doc-initials').style.display='flex';">
-                    <div class="doc-initials" style="display:none;">${doc.initials}</div>
+
+        function buildThumbnails(doctor) {
+            const container = document.getElementById('thumbnailGallery');
+            if (!doctor.gallery) return;
+
+            container.innerHTML = doctor.gallery.map((_, idx) => `
+                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="switchImage(${idx})">
+                    <img src="${doctor.galleryThumbs[idx]}" loading="lazy" 
+                         onerror="this.parentElement.innerHTML='<div class=\'thumbnail-placeholder\'><i class=\'fa-solid fa-image\'></i></div>';">
                 </div>
-                <div class="doc-name">${doc.name}</div>
-                <div class="doc-spec"><i class="fa-solid ${icon}"></i> ${doc.specialty}</div>
-                <button class="detail-btn" onclick="event.stopPropagation(); openDetail(${doc.id});"><i class="fa-regular fa-eye"></i> تفاصيل</button>
-            `;
-            fragment.appendChild(card);
-        });
-        
-        grid.innerHTML = '';
-        grid.appendChild(fragment);
-    }
-
-    function openDetail(id) {
-        const doc = doctors.find(d => d.id === id);
-        if(!doc) return;
-        currentDoctor = doc;
-        currentImageIndex = 0;
-        
-        document.getElementById('detailDoctorName').innerText = doc.name;
-        document.getElementById('detailName').innerText = doc.name;
-        document.getElementById('detailSpecialty').innerText = doc.specialty;
-        document.getElementById('detailBio').innerText = doc.bio;
-        document.getElementById('detailPrice').innerText = doc.price;
-        document.getElementById('detailMap').src = doc.mapEmbedUrl;
-        document.getElementById('modalDoctorName').innerHTML = `حجز مع ${doc.name}`;
-        
-        buildThumbnails(doc);
-        displayMainImage(0, doc);
-        
-        const scheduleDiv = document.getElementById('scheduleContent');
-        scheduleDiv.innerHTML = Object.entries(doc.schedule).map(([day, hours]) => `<div class="schedule-row"><span>${day}</span><span>${hours}</span></div>`).join('');
-        
-        const locationDiv = document.getElementById('detailLocationText');
-        locationDiv.innerText = doc.locationText || 'لم يتم تحديد العنوان التفصيلي، يرجى الاتصال للاستفسار';
-        
-        document.getElementById('home-section').style.display = 'none';
-        document.getElementById('doctor-section').style.display = 'block';
-        window.scrollTo(0,0);
-    }
-    
-    function goBack() {
-        document.getElementById('doctor-section').style.display = 'none';
-        document.getElementById('home-section').style.display = 'block';
-        document.getElementById('detailMap').src = '';
-        currentDoctor = null;
-    }
-    
-    function openBookingModal() {
-        if(!currentDoctor) return;
-        document.getElementById('bookingModal').classList.remove('hidden');
-        document.getElementById('bookingForm').reset();
-    }
-    
-    function closeBookingModal() {
-        document.getElementById('bookingModal').classList.add('hidden');
-    }
-    
-    document.getElementById('bookingForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        if(!currentDoctor) return;
-        const name = document.getElementById('patientName').value.trim();
-        const age = document.getElementById('patientAge').value.trim();
-        const phone = document.getElementById('patientPhone').value.trim();
-        const reason = document.getElementById('visitReason').value.trim();
-        
-        if(!name || !age || !phone || !reason) {
-            showToast('يرجى ملء جميع الحقول');
-            return;
+            `).join('');
         }
-        
-        let msg = `🩺 **حجز موعد جديد - طبيبك**\n\n`;
-        msg += `━━━━━━━━━━━━━━━━\n`;
-        msg += `👨‍⚕️ **بيانات الطبيب**\n`;
-        msg += `• الاسم: ${currentDoctor.name}\n`;
-        msg += `• الاختصاص: ${currentDoctor.specialty}\n`;
-        msg += `• المدينة: ${currentDoctor.city}\n`;
-        msg += `• العنوان: ${currentDoctor.locationText}\n`;
-        msg += `• سعر الكشف: ${currentDoctor.price}\n\n`;
-        msg += `━━━━━━━━━━━━━━━━\n`;
-        msg += `📋 **بيانات المريض**\n`;
-        msg += `• الاسم: ${name}\n`;
-        msg += `• العمر: ${age} سنة\n`;
-        msg += `• الهاتف: ${phone}\n`;
-        if(reason) msg += `• المكان القادم منه: ${reason}\n`;
-        msg += `\n━━━━━━━━━━━━━━\n`;
-        msg += `💳 طريقة الدفع: شام كاش / نقدي\n`;
-        msg += `━━━━━━━━━━━━━━━━\n📱 تم الإرسال عبر تطبيق طبيبك`;
-        
-        const encodedMsg = encodeURIComponent(msg);
-        closeBookingModal();
-        window.open(`https://wa.me/${currentDoctor.whatsapp.replace(/\+/,'')}?text=${encodedMsg}`, '_blank');
-        showToast('جاري التوجيه إلى واتساب');
-    });
-    
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.innerText = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
-    }
-    
-    window.onclick = (e) => {
-        const modal = document.getElementById('bookingModal');
-        if(e.target === modal) closeBookingModal();
-    };
-    
-    // تأخير التحميل الأولي للصور
-    window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
+
+        function displayMainImage(index, doctor) {
+            const main = document.getElementById('mainImage');
+            if (doctor.gallery[index]) {
+                main.innerHTML = `
+                    <img src="${doctor.gallery[index]}" loading="lazy" 
+                         onerror="this.parentElement.innerHTML='<div class=\'main-image-placeholder\'><i class=\'fa-solid fa-image\'></i><span>صورة</span></div>';">
+                `;
+            } else {
+                main.innerHTML =
+                    '<div class="main-image-placeholder"><i class="fa-solid fa-image"></i><span>صورة</span></div>';
+            }
+
+            // تحديث حالة النشاط على الصور المصغرة
+            document.querySelectorAll('.thumbnail').forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+            });
+        }
+
+        function switchImage(index) {
+            if (currentDoctor) {
+                currentImageIndex = index;
+                displayMainImage(index, currentDoctor);
+            }
+        }
+
+        // ============================
+        // دوال مودال الحجز
+        // ============================
+        function openBookingModal() {
+            if (currentDoctor) {
+                document.getElementById('bookingModal').classList.remove('hidden');
+            }
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        // معالجة تقديم نموذج الحجز
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentDoctor) return;
+
+            const name = document.getElementById('patientName').value.trim();
+            const age = document.getElementById('patientAge').value.trim();
+            const phone = document.getElementById('patientPhone').value.trim();
+            const reason = document.getElementById('visitReason').value.trim();
+
+            if (!name || !age || !phone || !reason) {
+                showToast('يرجى ملء جميع الحقول');
+                return;
+            }
+
+            // بناء رسالة واتساب
+            let msg = `🩺 حجز موعد جديد - طبيبك\n`;
+            msg += `━━━━━━━━━━━━━━━━\n`;
+            msg += `👨‍⚕️ الطبيب: ${currentDoctor.name}\n`;
+            msg += `اختصاص: ${currentDoctor.specialty}\n`;
+            msg += `العنوان: ${currentDoctor.locationText}\n`;
+            msg += `السعر: ${currentDoctor.price}\n`;
+            msg += `━━━━━━━━━━━━━━━━\n`;
+            msg += `📋 المريض: ${name}\n`;
+            msg += `العمر: ${age}\n`;
+            msg += `الهاتف: ${phone}\n`;
+            msg += `القادم من: ${reason}`;
+
+            const encoded = encodeURIComponent(msg);
+            closeBookingModal();
+            window.open(`https://wa.me/${currentDoctor.whatsapp.replace(/\+/, '')}?text=${encoded}`, '_blank');
+            showToast('جاري التوجيه إلى واتساب');
+        });
+
+        // ============================
+        // دالة إظهار إشعار التوست
+        // ============================
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        // ============================
+        // التهيئة عند تحميل الصفحة
+        // ============================
+        window.addEventListener('DOMContentLoaded', () => {
             buildFilters();
             initCityFilter();
             renderDoctors();
-        }, 100);
-    });
-</script>
+        });
+    </script>
 </body>
 </html>
